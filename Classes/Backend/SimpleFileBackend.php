@@ -189,11 +189,7 @@ class SimpleFileBackend extends IndependentAbstractBackend implements PhpCapable
             return false;
         }
 
-        $lock = new Lock($pathAndFilename, false);
-        $result = file_get_contents($pathAndFilename);
-        $lock->release();
-
-        return $result;
+        return $this->readCacheFile($pathAndFilename);
     }
 
     /**
@@ -325,11 +321,7 @@ class SimpleFileBackend extends IndependentAbstractBackend implements PhpCapable
         }
 
         $pathAndFilename = $this->cacheFilesIterator->getPathname();
-
-        $lock = new Lock($pathAndFilename, false);
-        $result = file_get_contents($pathAndFilename);
-        $lock->release();
-        return $result;
+        return $this->readCacheFile($pathAndFilename);
     }
 
     /**
@@ -408,22 +400,6 @@ class SimpleFileBackend extends IndependentAbstractBackend implements PhpCapable
     }
 
     /**
-     * Writes the cache data into the given cache file, using locking.
-     *
-     * @param string $cacheEntryPathAndFilename
-     * @param string $data
-     * @return boolean|integer Return value of file_put_contents
-     */
-    protected function writeCacheFile($cacheEntryPathAndFilename, $data)
-    {
-        $lock = new Lock($cacheEntryPathAndFilename);
-        $result = file_put_contents($cacheEntryPathAndFilename, $data);
-        $lock->release();
-
-        return $result;
-    }
-
-    /**
      * @return string
      */
     public function getBaseDirectory()
@@ -466,5 +442,57 @@ class SimpleFileBackend extends IndependentAbstractBackend implements PhpCapable
         }
 
         $this->cacheDirectory = $cacheDirectory;
+    }
+
+    /**
+     * Reads the cache data from the given cache file, using locking.
+     *
+     * @param string $cacheEntryPathAndFilename
+     * @param int|null $offset
+     * @param int|null $maxlen
+     * @return boolean|string The contents of the cache file or FALSE on error
+     */
+    protected function readCacheFile($cacheEntryPathAndFilename, $offset = null, $maxlen = null)
+    {
+        $data = false;
+        $file = @fopen($cacheEntryPathAndFilename, 'r');
+        if ($file === false) {
+            return false;
+        }
+        if (flock($file, LOCK_SH) !== false) {
+            if ($offset !== null) {
+                fseek($file, $offset);
+            }
+            $data = fread($file, $maxlen !== null ? $maxlen : filesize($cacheEntryPathAndFilename) - (int)$offset);
+            flock($file, LOCK_UN);
+        }
+        fclose($file);
+
+        return $data;
+    }
+
+    /**
+     * Writes the cache data into the given cache file, using locking.
+     *
+     * @param string $cacheEntryPathAndFilename
+     * @param string $data
+     * @return boolean|integer Return value of file_put_contents
+     */
+    protected function writeCacheFile($cacheEntryPathAndFilename, $data)
+    {
+        // This can be replaced by a simple file_put_contents($cacheEntryPathAndFilename, $data, LOCK_EX) once vfs
+        // is fixed for file_put_contents with LOCK_EX, see https://github.com/mikey179/vfsStream/wiki/Known-Issues
+        $result = false;
+        $file = @fopen($cacheEntryPathAndFilename, 'w');
+        if ($file === false) {
+            return false;
+        }
+        if (flock($file, LOCK_EX) !== false) {
+            $result = fwrite($file, $data);
+            flock($file, LOCK_UN);
+        }
+        fclose($file);
+
+        return $result;
     }
 }
