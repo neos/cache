@@ -182,7 +182,7 @@ class PdoBackend extends IndependentAbstractBackend implements TaggableBackendIn
      * @throws FilesException
      * @api
      */
-    public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = null): void
+    public function set(string $entryIdentifier, string $data, array $tags = [], ?int $lifetime = null): void
     {
         $this->connect();
 

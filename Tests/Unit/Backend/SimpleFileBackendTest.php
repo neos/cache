@@ -61,7 +61,7 @@ class SimpleFileBackendTest extends BaseTestCase
      * @param FrontendInterface $mockCacheFrontend
      * @return SimpleFileBackend
      */
-    protected function getSimpleFileBackend(array $options = [], FrontendInterface $mockCacheFrontend = null)
+    protected function getSimpleFileBackend(array $options = [], ?FrontendInterface $mockCacheFrontend = null)
     {
         $simpleFileBackend = new SimpleFileBackend($this->mockEnvironmentConfiguration, $options);
 

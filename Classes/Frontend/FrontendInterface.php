@@ -56,7 +56,7 @@ interface FrontendInterface
      * @return void
      * @api
      */
-    public function set(string $entryIdentifier, $data, array $tags = [], int $lifetime = null);
+    public function set(string $entryIdentifier, $data, array $tags = [], ?int $lifetime = null);
 
     /**
      * Finds and returns data from the cache.
