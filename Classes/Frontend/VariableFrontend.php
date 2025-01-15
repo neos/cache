@@ -56,7 +56,7 @@ class VariableFrontend extends AbstractFrontend
      * @throws \Neos\Cache\Exception
      * @api
      */
-    public function set(string $entryIdentifier, $variable, array $tags = [], int $lifetime = null)
+    public function set(string $entryIdentifier, $variable, array $tags = [], ?int $lifetime = null)
     {
         if (!$this->isValidEntryIdentifier($entryIdentifier)) {
             throw new \InvalidArgumentException('"' . $entryIdentifier . '" is not a valid cache entry identifier.', 1233058264);

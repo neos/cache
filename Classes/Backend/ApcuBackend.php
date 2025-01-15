@@ -117,7 +117,7 @@ class ApcuBackend extends IndependentAbstractBackend implements TaggableBackendI
      * @throws \InvalidArgumentException if the identifier is not valid
      * @api
      */
-    public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = null): void
+    public function set(string $entryIdentifier, string $data, array $tags = [], ?int $lifetime = null): void
     {
         if (!$this->cache instanceof FrontendInterface) {
             throw new Exception('No cache frontend has been set yet via setCache().', 1232986818);

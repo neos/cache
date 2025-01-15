@@ -57,7 +57,7 @@ interface BackendInterface
      * @throws \InvalidArgumentException if the identifier is not valid
      * @api
      */
-    public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = null): void;
+    public function set(string $entryIdentifier, string $data, array $tags = [], ?int $lifetime = null): void;
 
     /**
      * Loads data from the cache.
