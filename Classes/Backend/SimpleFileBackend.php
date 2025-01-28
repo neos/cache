@@ -498,7 +498,7 @@ class SimpleFileBackend extends IndependentAbstractBackend implements PhpCapable
         for ($i = 0; $i < 3; $i++) {
             $data = false;
             try {
-                $file = fopen($cacheEntryPathAndFilename, 'rb');
+                $file = @fopen($cacheEntryPathAndFilename, 'rb');
                 if ($file === false) {
                     continue;
                 }
