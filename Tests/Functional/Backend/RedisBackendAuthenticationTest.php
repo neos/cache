@@ -19,6 +19,7 @@ use Neos\Cache\Backend\RedisBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Tests\BaseTestCase;
 use RedisException;
+use Redis;
 
 /**
  * Testcase for the redis cache backend
@@ -40,6 +41,50 @@ use RedisException;
  */
 class RedisBackendAuthenticationTest extends BaseTestCase
 {
+
+    /**
+     * @var Redis|null
+     */
+    protected static ?Redis $redis = null;
+
+    /**
+     * Create required Redis users for the test suite
+     */
+    public static function setUpBeforeClass(): void
+    {
+        try {
+            self::$redis = new Redis();
+            self::$redis->connect('127.0.0.1', 6379);
+
+            // clean state before
+            @self::$redis->rawCommand('ACL', 'DELUSER', 'test_no_password');
+            @self::$redis->rawCommand('ACL', 'DELUSER', 'test_password');
+
+            // add users
+            self::$redis->rawCommand('ACL', 'SETUSER', 'test_no_password', 'on', '>', '~*', '&*', '+@all');
+            self::$redis->rawCommand('ACL', 'SETUSER', 'test_password', 'on', '>secret_password', '~*', '&*', '+@all');
+        } catch (Exception $e) {
+            self::markTestSkipped('Could not prepare Redis users: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Tear down Redis users after the suite has run
+     */
+    public static function tearDownAfterClass(): void
+    {
+        if (self::$redis instanceof Redis) {
+            try {
+                self::$redis->rawCommand('ACL', 'DELUSER', 'test_no_password');
+                self::$redis->rawCommand('ACL', 'DELUSER', 'test_password');
+            } catch (Exception $e) {
+                // ignore
+            }
+            self::$redis->close();
+            self::$redis = null;
+        }
+    }
+
     /**
      * Set up test case
      *
@@ -59,7 +104,6 @@ class RedisBackendAuthenticationTest extends BaseTestCase
             $this->markTestSkipped('redis server not reachable');
         }
     }
-
 
     /**
      * @test
