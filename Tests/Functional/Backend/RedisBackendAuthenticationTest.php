@@ -41,7 +41,6 @@ use Redis;
  */
 class RedisBackendAuthenticationTest extends BaseTestCase
 {
-
     /**
      * @var Redis|null
      */
