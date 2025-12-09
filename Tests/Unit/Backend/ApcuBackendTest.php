@@ -22,9 +22,8 @@ use Neos\Cache\Frontend\VariableFrontend;
 
 /**
  * Testcase for the APCu cache backend
- *
- * @requires extension apcu
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('apcu')]
 class ApcuBackendTest extends BaseTestCase
 {
     /**

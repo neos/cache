@@ -82,8 +82,8 @@ class VariableFrontendTest extends BaseTestCase
 
     /**
      * @test
-     * @requires extension igbinary
      */
+    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
     public function setUsesIgBinarySerializeIfAvailable()
     {
         $theString = 'Just some value';
@@ -134,8 +134,8 @@ class VariableFrontendTest extends BaseTestCase
 
     /**
      * @test
-     * @requires extension igbinary
      */
+    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
     public function getUsesIgBinaryIfAvailable()
     {
         $theArray = ['Just some value', 'and another one.'];
@@ -217,8 +217,8 @@ class VariableFrontendTest extends BaseTestCase
 
     /**
      * @test
-     * @requires extension igbinary
      */
+    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
     public function getByTagUsesIgBinaryIfAvailable()
     {
         $tag = 'sometag';

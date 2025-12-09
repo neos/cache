@@ -23,8 +23,8 @@ use Neos\Cache\Tests\BaseTestCase;
  * Testcase for the redis cache backend
  *
  * These unit tests rely on a mocked redis client.
- * @requires extension redis
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
 class RedisBackendTest extends BaseTestCase
 {
     /**

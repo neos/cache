@@ -335,7 +335,7 @@ class SimpleFileBackendTest extends BaseTestCase
     /**
      * @return array
      */
-    public function invalidEntryIdentifiers()
+    public static function invalidEntryIdentifiers()
     {
         return [
             'trailing slash' => ['/myIdentifer'],

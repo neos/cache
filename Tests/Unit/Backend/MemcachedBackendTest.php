@@ -22,9 +22,8 @@ use Neos\Cache\Frontend\FrontendInterface;
 
 /**
  * Testcase for the cache to memcached backend
- *
- * @requires extension memcached
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('memcached')]
 class MemcachedBackendTest extends BaseTestCase
 {
     /**

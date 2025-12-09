@@ -25,9 +25,8 @@ use Neos\Cache\Frontend\FrontendInterface;
  * These tests use actual database servers and will place and remove keys in the db!
  * Since all keys have the 'TestCache:' prefix, running the tests should have
  * no side effects on non-related cache entries.
- *
- * @requires extension pdo
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo')]
 class PdoBackendTest extends BaseTestCase
 {
     /**

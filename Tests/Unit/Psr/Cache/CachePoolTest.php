@@ -24,7 +24,7 @@ use Neos\Cache\Tests\BaseTestCase;
  */
 class CachePoolTest extends BaseTestCase
 {
-    public function validIdentifiersDataProvider(): array
+    public static function validIdentifiersDataProvider(): array
     {
         return [
             ['short'],
@@ -52,7 +52,7 @@ class CachePoolTest extends BaseTestCase
         self::assertInstanceOf(CachePool::class, $cachePool);
     }
 
-    public function invalidIdentifiersDataProvider(): array
+    public static function invalidIdentifiersDataProvider(): array
     {
         return [
             [''],

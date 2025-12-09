@@ -22,9 +22,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Testcase for the PDO cache backend
- *
- * @requires extension pdo_sqlite
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo_sqlite')]
 class PdoBackendTest extends BaseTestCase
 {
     /**

@@ -13,7 +13,7 @@ class FileBackendEntryDtoTest extends BaseTestCase
 {
     /**
      */
-    public function validEntryConstructorParameters()
+    public static function validEntryConstructorParameters()
     {
         return [
             ['data', [], 0],

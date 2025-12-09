@@ -36,9 +36,8 @@ use Redis;
  * The users can be added by:
  * acl setuser test_no_password on > ~* &* +@all
  * acl setuser test_password on >secret_password ~* &* +@all
- *
- * @requires extension redis
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
 class RedisBackendAuthenticationTest extends BaseTestCase
 {
     /**

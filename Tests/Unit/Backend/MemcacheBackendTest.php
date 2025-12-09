@@ -12,12 +12,10 @@ include_once('MemcachedBackendTest.php');
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
 /**
  * Testcase for the cache to memcache backend
- *
- * @requires extension memcache
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('memcache')]
 class MemcacheBackendTest extends MemcachedBackendTest
 {
 }

@@ -26,9 +26,8 @@ use Neos\Cache\Frontend\FrontendInterface;
  * no side effects on non-related cache entries.
  *
  * Tests require Redis listening on 127.0.0.1:6379.
- *
- * @requires extension redis
  */
+#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
 class RedisBackendTest extends BaseTestCase
 {
     /**

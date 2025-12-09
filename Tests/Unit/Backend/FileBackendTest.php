@@ -411,7 +411,7 @@ class FileBackendTest extends BaseTestCase
 
     /**
      */
-    public function invalidEntryIdentifiers()
+    public static function invalidEntryIdentifiers()
     {
         return [
             'trailing slash' => ['/myIdentifer'],
