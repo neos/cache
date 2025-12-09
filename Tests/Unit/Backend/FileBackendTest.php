@@ -673,7 +673,18 @@ class FileBackendTest extends BaseTestCase
         $backend = $this->prepareDefaultBackend(['findIdentifiersByTags', 'remove']);
 
         $backend->expects(self::once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->will(self::returnValue(['foo', 'bar', 'baz']));
-        $backend->expects(self::atLeast(3))->method('remove')->withConsecutive(['foo'], ['bar'], ['baz']);
+        $matcher = self::atLeast(3);
+        $backend->expects($matcher)->method('remove')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame('foo', $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame('bar', $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 3) {
+                $this->assertSame('baz', $parameters[0]);
+            }
+        });
 
         $backend->flushByTag('UnitTestTag%special');
     }
@@ -686,7 +697,18 @@ class FileBackendTest extends BaseTestCase
         $backend = $this->prepareDefaultBackend(['findIdentifiersByTags', 'remove']);
 
         $backend->expects(self::once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->will(self::returnValue(['foo', 'bar', 'baz']));
-        $backend->expects(self::atLeast(3))->method('remove')->withConsecutive(['foo'], ['bar'], ['baz']);
+        $matcher = self::atLeast(3);
+        $backend->expects($matcher)->method('remove')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->getInvocationCount() === 1) {
+                $this->assertSame('foo', $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 2) {
+                $this->assertSame('bar', $parameters[0]);
+            }
+            if ($matcher->getInvocationCount() === 3) {
+                $this->assertSame('baz', $parameters[0]);
+            }
+        });
 
         $backend->flushByTags(['UnitTestTag%special']);
     }
