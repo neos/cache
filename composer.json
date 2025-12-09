@@ -14,7 +14,7 @@
         "neos/utility-opcodecache": "self.version"
     },
     "require-dev": {
-        "mikey179/vfsstream": "^1.6.10",
+        "mikey179/vfsstream": "^1.6.12",
         "phpunit/phpunit": "~11.5"
     },
     "autoload": {
