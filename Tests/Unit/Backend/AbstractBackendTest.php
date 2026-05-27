@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -21,7 +24,7 @@ use Neos\Cache\Tests\BaseTestCase;
  * Testcase for the abstract cache backend
  *
  */
-class AbstractBackendTest extends BaseTestCase
+final class AbstractBackendTest extends BaseTestCase
 {
     /**
      * @var AbstractBackend

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -25,7 +27,7 @@ use Neos\Cache\Tests\BaseTestCase;
  * These unit tests rely on a mocked redis client.
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
-class RedisBackendTest extends BaseTestCase
+final class RedisBackendTest extends BaseTestCase
 {
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Redis
@@ -38,11 +40,6 @@ class RedisBackendTest extends BaseTestCase
     private $backend;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FrontendInterface
-     */
-    private $cache;
-
-    /**
      * Set up test case
      * @return void
      */
@@ -53,9 +50,9 @@ class RedisBackendTest extends BaseTestCase
             $this->markTestSkipped(sprintf('phpredis extension version %s is not supported. Please update to version 5.0.0+.', $phpredisVersion));
         }
 
-        $this->redis = $this->getMockBuilder(\Redis::class)->disableOriginalConstructor()->getMock();
-        $this->cache = $this->createMock(FrontendInterface::class);
-        $this->cache->method('getIdentifier')
+        $this->redis = $this->createMock(\Redis::class);
+        $cache = $this->createMock(FrontendInterface::class);
+        $cache->method('getIdentifier')
             ->willReturn('Foo_Cache');
 
         $mockEnvironmentConfiguration = $this->getMockBuilder(EnvironmentConfiguration::class)->setConstructorArgs([
@@ -65,7 +62,7 @@ class RedisBackendTest extends BaseTestCase
         ])->getMock();
 
         $this->backend = new RedisBackend($mockEnvironmentConfiguration, ['redis' => $this->redis]);
-        $this->backend->setCache($this->cache);
+        $this->backend->setCache($cache);
 
         // set this to false manually, since the check in isFrozen leads to null (instead of a boolean)
         // as the exists call is not mocked (and cannot easily be mocked, as it is used for different
@@ -225,25 +222,21 @@ class RedisBackendTest extends BaseTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function writingOperationsProvider(): array
+    public static function writingOperationsProvider(): \Iterator
     {
-        return [
-            ['set'],
-            ['remove'],
-            ['flushByTag'],
-            ['freeze']
-        ];
+        yield ['set'];
+        yield ['remove'];
+        yield ['flushByTag'];
+        yield ['freeze'];
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function batchWritingOperationsProvider(): array
+    public static function batchWritingOperationsProvider(): \Iterator
     {
-        return [
-            ['flushByTags'],
-        ];
+        yield ['flushByTags'];
     }
 }

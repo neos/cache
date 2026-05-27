@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -24,7 +27,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Testcase for the PDO cache backend
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo_sqlite')]
-class PdoBackendTest extends BaseTestCase
+final class PdoBackendTest extends BaseTestCase
 {
     /**
      * @var string
@@ -217,13 +220,13 @@ class PdoBackendTest extends BaseTestCase
      */
     public function flushRemovesOnlyOwnEntries()
     {
-        $thisCache = $this->getMockBuilder(FrontendInterface::class)->disableOriginalConstructor()->getMock();
-        $thisCache->expects($this->any())->method('getIdentifier')->willReturn(('thisCache'));
+        $thisCache = $this->createMock(FrontendInterface::class);
+        $thisCache->method('getIdentifier')->willReturn(('thisCache'));
         $thisBackend = $this->setUpBackend();
         $thisBackend->setCache($thisCache);
 
-        $thatCache = $this->getMockBuilder(FrontendInterface::class)->disableOriginalConstructor()->getMock();
-        $thatCache->expects($this->any())->method('getIdentifier')->willReturn(('thatCache'));
+        $thatCache = $this->createMock(FrontendInterface::class);
+        $thatCache->method('getIdentifier')->willReturn(('thatCache'));
         $thatBackend = $this->setUpBackend();
         $thatBackend->setCache($thatCache);
 
@@ -256,7 +259,7 @@ class PdoBackendTest extends BaseTestCase
         $backend->set('second', 'secondData');
 
         $data = \iterator_to_array($backend);
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData'],
             $data
         );
@@ -276,7 +279,7 @@ class PdoBackendTest extends BaseTestCase
         $backend->set('third', 'thirdData');
 
         $data = \iterator_to_array($backend);
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData', 'third' => 'thirdData'],
             $data
         );
@@ -338,8 +341,8 @@ class PdoBackendTest extends BaseTestCase
     protected function setUpBackend()
     {
         /** @var FrontendInterface|MockObject $mockCache */
-        $mockCache = $this->getMockBuilder(FrontendInterface::class)->disableOriginalConstructor()->getMock();
-        $mockCache->expects($this->any())->method('getIdentifier')->willReturn(('TestCache'));
+        $mockCache = $this->createMock(FrontendInterface::class);
+        $mockCache->method('getIdentifier')->willReturn(('TestCache'));
 
         $mockEnvironmentConfiguration = $this->getMockBuilder(EnvironmentConfiguration::class)->setConstructorArgs([
             __DIR__ . '~Testing',

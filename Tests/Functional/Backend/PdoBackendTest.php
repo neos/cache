@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Functional\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -29,7 +32,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * no side effects on non-related cache entries.
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo')]
-class PdoBackendTest extends BaseTestCase
+final class PdoBackendTest extends BaseTestCase
 {
     /**
      * @var PdoBackend[]
@@ -87,7 +90,7 @@ class PdoBackendTest extends BaseTestCase
                 $entries++;
             }
 
-            self::assertEquals(3, $entries);
+            self::assertSame(3, $entries);
         }
     }
 

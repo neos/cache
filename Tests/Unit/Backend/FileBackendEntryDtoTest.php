@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -9,21 +12,19 @@ use Neos\Cache\Tests\BaseTestCase;
 /**
  * Test case for the FileBackendEntryDto
  */
-class FileBackendEntryDtoTest extends BaseTestCase
+final class FileBackendEntryDtoTest extends BaseTestCase
 {
     /**
      */
-    public static function validEntryConstructorParameters(): array
+    public static function validEntryConstructorParameters(): \Iterator
     {
-        return [
-            ['data', [], 0],
-            ['data', [], time() + 100],
-            ['data', [], time() - 100],
-            ['data', [], time()],
-            ['', ['tag1'], time()],
-            ['data', ['tag1'], time()],
-            ['data', ['tag1', 'tag2'], time()],
-        ];
+        yield ['data', [], 0];
+        yield ['data', [], time() + 100];
+        yield ['data', [], time() - 100];
+        yield ['data', [], time()];
+        yield ['', ['tag1'], time()];
+        yield ['data', ['tag1'], time()];
+        yield ['data', ['tag1', 'tag2'], time()];
     }
 
     /**
@@ -43,9 +44,9 @@ class FileBackendEntryDtoTest extends BaseTestCase
     public function gettersReturnDataProvidedToConstructor(string $data, array $tags, int $expiryTime): void
     {
         $entryDto = new FileBackendEntryDto($data, $tags, $expiryTime);
-        self::assertEquals($data, $entryDto->getData());
+        self::assertSame($data, $entryDto->getData());
         self::assertEquals($tags, $entryDto->getTags());
-        self::assertEquals($expiryTime, $entryDto->getExpiryTime());
+        self::assertSame($expiryTime, $entryDto->getExpiryTime());
     }
 
     /**
@@ -76,9 +77,9 @@ class FileBackendEntryDtoTest extends BaseTestCase
         $entryString = (string)$entryDto;
         $entryDtoReconstituted = FileBackendEntryDto::fromString($entryString);
         $entryStringFromReconstituted = (string)$entryDtoReconstituted;
-        self::assertEquals($entryString, $entryStringFromReconstituted);
-        self::assertEquals($data, $entryDtoReconstituted->getData());
+        self::assertSame($entryString, $entryStringFromReconstituted);
+        self::assertSame($data, $entryDtoReconstituted->getData());
         self::assertEquals($tags, $entryDtoReconstituted->getTags());
-        self::assertEquals($expiryTime, $entryDtoReconstituted->getExpiryTime());
+        self::assertSame($expiryTime, $entryDtoReconstituted->getExpiryTime());
     }
 }

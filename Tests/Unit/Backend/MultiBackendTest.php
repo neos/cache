@@ -11,7 +11,7 @@ use Neos\Cache\Backend\RedisBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Tests\BaseTestCase;
 
-class MultiBackendTest extends BaseTestCase
+final class MultiBackendTest extends BaseTestCase
 {
     /**
      * @test

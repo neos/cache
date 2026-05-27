@@ -10,7 +10,7 @@ use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Cache\Tests\BaseTestCase;
 
-class IterableMultiBackendTest extends BaseTestCase
+final class IterableMultiBackendTest extends BaseTestCase
 {
     /**
      * @test

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Functional\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -38,7 +40,7 @@ use Redis;
  * acl setuser test_password on >secret_password ~* &* +@all
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
-class RedisBackendAuthenticationTest extends BaseTestCase
+final class RedisBackendAuthenticationTest extends BaseTestCase
 {
     /**
      * @var Redis|null

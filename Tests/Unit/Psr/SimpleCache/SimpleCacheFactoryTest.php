@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Psr\SimpleCache;
 
 use Neos\Cache\Backend\NullBackend;
@@ -11,7 +14,7 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * Tets the factors for PSR-16 Simple Caches
  */
-class SimpleCacheFactoryTest extends BaseTestCase
+final class SimpleCacheFactoryTest extends BaseTestCase
 {
     /**
      * @var EnvironmentConfiguration

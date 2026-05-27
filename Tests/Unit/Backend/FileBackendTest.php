@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -27,7 +30,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test case for the cache to file backend
  */
-class FileBackendTest extends BaseTestCase
+final class FileBackendTest extends BaseTestCase
 {
     /**
      */
@@ -42,7 +45,7 @@ class FileBackendTest extends BaseTestCase
     public function setCacheThrowsExceptionOnNonWritableDirectory(): void
     {
         $this->expectException(Exception::class);
-        $mockCache = $this->createMock(AbstractFrontend::class);
+        $mockCache = $this->createStub(AbstractFrontend::class);
 
         $mockEnvironmentConfiguration = $this->createEnvironmentConfigurationMock([__DIR__ . '~Testing', 'http://localhost/', PHP_MAXPATHLEN]);
 
@@ -78,7 +81,7 @@ class FileBackendTest extends BaseTestCase
         $backend = new FileBackend($mockEnvironmentConfiguration, ['cacheDirectory' => 'vfs://Foo/OtherDirectory']);
         $backend->setCache($mockCache);
 
-        self::assertEquals('vfs://Foo/OtherDirectory/', $backend->getCacheDirectory());
+        self::assertSame('vfs://Foo/OtherDirectory/', $backend->getCacheDirectory());
     }
 
     /**
@@ -96,7 +99,7 @@ class FileBackendTest extends BaseTestCase
         $backend = $this->prepareDefaultBackend();
         $backend->setCache($mockCache);
 
-        self::assertEquals('vfs://Foo/Cache/Data/SomeCache/', $backend->getCacheDirectory());
+        self::assertSame('vfs://Foo/Cache/Data/SomeCache/', $backend->getCacheDirectory());
     }
 
     /**
@@ -112,7 +115,7 @@ class FileBackendTest extends BaseTestCase
         $frontend = new PhpFrontend('SomeCache', $backend);
         $backend->setCache($frontend);
 
-        self::assertEquals('vfs://Foo/Cache/Code/SomeCache/', $backend->getCacheDirectory());
+        self::assertSame('vfs://Foo/Cache/Code/SomeCache/', $backend->getCacheDirectory());
     }
 
     /**
@@ -134,7 +137,7 @@ class FileBackendTest extends BaseTestCase
 
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename, false, null, 0, strlen($data));
-        self::assertEquals($data, $retrievedData);
+        self::assertSame($data, $retrievedData);
     }
 
     /**
@@ -158,7 +161,7 @@ class FileBackendTest extends BaseTestCase
         $pathAndFilename = 'vfs://Foo/Cache/Data/UnitTestCache/' . $entryIdentifier;
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename, false, null, 0, strlen($data2));
-        self::assertEquals($data2, $retrievedData);
+        self::assertSame($data2, $retrievedData);
     }
 
     /**
@@ -180,7 +183,7 @@ class FileBackendTest extends BaseTestCase
         $pathAndFilename = 'vfs://Foo/Cache/Data/UnitTestCache/' . $entryIdentifier;
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename, false, null, strlen($data), 9);
-        self::assertEquals('Tag1 Tag2', $retrievedData);
+        self::assertSame('Tag1 Tag2', $retrievedData);
     }
 
     /**
@@ -357,7 +360,7 @@ class FileBackendTest extends BaseTestCase
     public function hasReturnsFalseForExpiredEntries(): void
     {
         $backend = $this->prepareDefaultBackend(['isCacheFileExpired']);
-        $backend->expects($this->exactly(2))->method('isCacheFileExpired')->will($this->onConsecutiveCalls(true, false));
+        $backend->expects($this->exactly(2))->method('isCacheFileExpired')->willReturnOnConsecutiveCalls(true, false);
 
         self::assertFalse($backend->has('foo'));
         self::assertTrue($backend->has('bar'));
@@ -411,22 +414,20 @@ class FileBackendTest extends BaseTestCase
 
     /**
      */
-    public static function invalidEntryIdentifiers(): array
+    public static function invalidEntryIdentifiers(): \Iterator
     {
-        return [
-            'trailing slash' => ['/myIdentifer'],
-            'trailing dot and slash' => ['./myIdentifer'],
-            'trailing two dots and slash' => ['../myIdentifier'],
-            'trailing with multiple dots and slashes' => ['.././../myIdentifier'],
-            'slash in middle part' => ['my/Identifier'],
-            'dot and slash in middle part' => ['my./Identifier'],
-            'two dots and slash in middle part' => ['my../Identifier'],
-            'multiple dots and slashes in middle part' => ['my.././../Identifier'],
-            'pending slash' => ['myIdentifier/'],
-            'pending dot and slash' => ['myIdentifier./'],
-            'pending dots and slash' => ['myIdentifier../'],
-            'pending multiple dots and slashes' => ['myIdentifier.././../'],
-        ];
+        yield 'trailing slash' => ['/myIdentifer'];
+        yield 'trailing dot and slash' => ['./myIdentifer'];
+        yield 'trailing two dots and slash' => ['../myIdentifier'];
+        yield 'trailing with multiple dots and slashes' => ['.././../myIdentifier'];
+        yield 'slash in middle part' => ['my/Identifier'];
+        yield 'dot and slash in middle part' => ['my./Identifier'];
+        yield 'two dots and slash in middle part' => ['my../Identifier'];
+        yield 'multiple dots and slashes in middle part' => ['my.././../Identifier'];
+        yield 'pending slash' => ['myIdentifier/'];
+        yield 'pending dot and slash' => ['myIdentifier./'];
+        yield 'pending dots and slash' => ['myIdentifier../'];
+        yield 'pending multiple dots and slashes' => ['myIdentifier.././../'];
     }
 
     /**
@@ -638,7 +639,7 @@ class FileBackendTest extends BaseTestCase
         $actualEntries = $backend->findIdentifiersByTag('UnitTestTag%special');
         self::assertIsArray($actualEntries);
 
-        self::assertEquals($expectedEntry, array_pop($actualEntries));
+        self::assertSame($expectedEntry, array_pop($actualEntries));
     }
 
     /**
@@ -718,7 +719,7 @@ class FileBackendTest extends BaseTestCase
     {
         /** @var MockObject $backend */
         $backend = $this->prepareDefaultBackend(['findIdentifiersByTags', 'remove']);
-        $backend->expects(self::once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->will(self::returnValue(['foo', 'bar', 'baz']));
+        $backend->expects(self::once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->willReturn(['foo', 'bar', 'baz']);
         $matcher = self::atLeast(3);
         $backend->expects($matcher)->method('remove')->willReturnCallback(function (...$parameters) use ($matcher) {
             if ($matcher->numberOfInvocations() === 1) {
@@ -747,7 +748,7 @@ class FileBackendTest extends BaseTestCase
         $mockCache->expects($this->atLeastOnce())->method('getIdentifier')->willReturn(('UnitTestCache'));
 
         $backend = $this->prepareDefaultBackend(['isCacheFileExpired']);
-        $backend->expects($this->exactly(2))->method('isCacheFileExpired')->will($this->onConsecutiveCalls(true, false));
+        $backend->expects($this->exactly(2))->method('isCacheFileExpired')->willReturnOnConsecutiveCalls(true, false);
         $backend->setCache($mockCache);
 
         $data = 'some data';
@@ -808,11 +809,11 @@ class FileBackendTest extends BaseTestCase
         natsort($entries);
         $i = 0;
         foreach ($entries as $entryIdentifier => $data) {
-            self::assertEquals(sprintf('entry-%s', $i), $entryIdentifier);
+            self::assertSame(sprintf('entry-%s', $i), $entryIdentifier);
             self::assertEquals('some data ' . $i, $data);
             $i++;
         }
-        self::assertEquals(100, $i);
+        self::assertSame(100, $i);
     }
 
     /**

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Frontend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -21,7 +24,7 @@ use Neos\Cache\Frontend\StringFrontend;
  * Testcase for the abstract cache frontend
  *
  */
-class AbstractFrontendTest extends BaseTestCase
+final class AbstractFrontendTest extends BaseTestCase
 {
     /** @var  AbstractBackend */
     protected $mockBackend;
@@ -134,7 +137,7 @@ class AbstractFrontendTest extends BaseTestCase
     public function invalidEntryIdentifiersAreRecognizedAsInvalid()
     {
         $identifier = 'someCacheIdentifier';
-        $backend = $this->createMock(AbstractBackend::class);
+        $backend = $this->createStub(AbstractBackend::class);
 
         $cache = $this->getMockBuilder(StringFrontend::class)
             ->onlyMethods(['__construct', 'get', 'set', 'has', 'remove', 'getByTag'])
@@ -152,7 +155,7 @@ class AbstractFrontendTest extends BaseTestCase
     public function validEntryIdentifiersAreRecognizedAsValid()
     {
         $identifier = 'someCacheIdentifier';
-        $backend = $this->createMock(AbstractBackend::class);
+        $backend = $this->createStub(AbstractBackend::class);
         $cache = $this->getMockBuilder(StringFrontend::class)
             ->onlyMethods(['__construct', 'get', 'set', 'has', 'remove', 'getByTag'])
             ->setConstructorArgs([$identifier, $backend])
@@ -169,7 +172,7 @@ class AbstractFrontendTest extends BaseTestCase
     public function invalidTagsAreRecognizedAsInvalid()
     {
         $identifier = 'someCacheIdentifier';
-        $backend = $this->createMock(AbstractBackend::class);
+        $backend = $this->createStub(AbstractBackend::class);
         $cache = $this->getMockBuilder(StringFrontend::class)
             ->onlyMethods(['__construct', 'get', 'set', 'has', 'remove', 'getByTag'])
             ->setConstructorArgs([$identifier, $backend])
@@ -186,7 +189,7 @@ class AbstractFrontendTest extends BaseTestCase
     public function validTagsAreRecognizedAsValid()
     {
         $identifier = 'someCacheIdentifier';
-        $backend = $this->createMock(AbstractBackend::class);
+        $backend = $this->createStub(AbstractBackend::class);
         $cache = $this->getMockBuilder(StringFrontend::class)
             ->onlyMethods(['__construct', 'get', 'set', 'has', 'remove', 'getByTag'])
             ->setConstructorArgs([$identifier, $backend])

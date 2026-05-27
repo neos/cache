@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Frontend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -24,7 +27,7 @@ use Neos\Cache\Frontend\VariableFrontend;
  * Testcase for the variable cache frontend
  *
  */
-class VariableFrontendTest extends BaseTestCase
+final class VariableFrontendTest extends BaseTestCase
 {
     /**
      * @test
@@ -209,10 +212,10 @@ class VariableFrontendTest extends BaseTestCase
         $backend = $this->prepareTaggableBackend();
 
         $backend->expects($this->once())->method('findIdentifiersByTag')->with(self::equalTo($tag))->willReturn(($identifiers));
-        $backend->expects($this->exactly(2))->method('get')->will($this->onConsecutiveCalls(serialize('one value'), serialize('two value')));
+        $backend->expects($this->exactly(2))->method('get')->willReturnOnConsecutiveCalls(serialize('one value'), serialize('two value'));
 
         $cache = new VariableFrontend('VariableFrontend', $backend);
-        self::assertEquals($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
+        self::assertSame($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
     }
 
     /**
@@ -227,12 +230,12 @@ class VariableFrontendTest extends BaseTestCase
         $backend = $this->prepareTaggableBackend();
 
         $backend->expects($this->once())->method('findIdentifiersByTag')->with(self::equalTo($tag))->willReturn(($identifiers));
-        $backend->expects($this->exactly(2))->method('get')->will($this->onConsecutiveCalls(igbinary_serialize('one value'), igbinary_serialize('two value')));
+        $backend->expects($this->exactly(2))->method('get')->willReturnOnConsecutiveCalls(igbinary_serialize('one value'), igbinary_serialize('two value'));
 
         $cache = new VariableFrontend('VariableFrontend', $backend);
         $cache->initializeObject();
 
-        self::assertEquals($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
+        self::assertSame($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
     }
 
     /**

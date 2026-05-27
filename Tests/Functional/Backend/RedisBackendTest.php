@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Functional\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -28,17 +31,12 @@ use Neos\Cache\Frontend\FrontendInterface;
  * Tests require Redis listening on 127.0.0.1:6379.
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
-class RedisBackendTest extends BaseTestCase
+final class RedisBackendTest extends BaseTestCase
 {
     /**
      * @var RedisBackend
      */
     private $backend;
-
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FrontendInterface
-     */
-    private $cache;
 
     /**
      * Set up test case
@@ -62,9 +60,9 @@ class RedisBackendTest extends BaseTestCase
             new EnvironmentConfiguration('Redis a wonderful color Testing', '/some/path', PHP_MAXPATHLEN),
             ['hostname' => '127.0.0.1', 'database' => 0]
         );
-        $this->cache = $this->createMock(FrontendInterface::class);
-        $this->cache->expects($this->any())->method('getIdentifier')->willReturn(('TestCache'));
-        $this->backend->setCache($this->cache);
+        $cache = $this->createMock(FrontendInterface::class);
+        $cache->method('getIdentifier')->willReturn(('TestCache'));
+        $this->backend->setCache($cache);
         $this->backend->flush();
     }
 
@@ -105,7 +103,7 @@ class RedisBackendTest extends BaseTestCase
         natsort($actual);
         $actual = array_values($actual);
 
-        self::assertEquals($expected, $actual);
+        self::assertSame($expected, $actual);
         self::assertEquals(['some_other_entry'], $this->backend->findIdentifiersByTag('tag3'));
     }
 
@@ -122,7 +120,7 @@ class RedisBackendTest extends BaseTestCase
             $entryIdentifiers[] = $entryIdentifier;
         }
 
-        self::assertEquals(['some_entry'], $entryIdentifiers);
+        self::assertSame(['some_entry'], $entryIdentifiers);
     }
 
     /**
@@ -229,7 +227,7 @@ class RedisBackendTest extends BaseTestCase
             $entryIdentifiers[] = $entryIdentifier;
         }
 
-        self::assertEquals([], $entryIdentifiers);
+        self::assertSame([], $entryIdentifiers);
     }
 
     /**
@@ -247,7 +245,7 @@ class RedisBackendTest extends BaseTestCase
             $entryIdentifiers[] = $entryIdentifier;
         }
 
-        self::assertEquals([], $entryIdentifiers);
+        self::assertSame([], $entryIdentifiers);
     }
 
     /**

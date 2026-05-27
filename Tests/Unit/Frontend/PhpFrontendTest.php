@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Frontend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -23,7 +26,7 @@ use Neos\Cache\Frontend\StringFrontend;
  * Testcase for the PHP source code cache frontend
  *
  */
-class PhpFrontendTest extends BaseTestCase
+final class PhpFrontendTest extends BaseTestCase
 {
     /**
      * @test

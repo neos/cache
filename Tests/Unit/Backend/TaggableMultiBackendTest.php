@@ -10,7 +10,7 @@ use Neos\Cache\Backend\TaggableMultiBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Tests\BaseTestCase;
 
-class TaggableMultiBackendTest extends BaseTestCase
+final class TaggableMultiBackendTest extends BaseTestCase
 {
     /**
      * @test

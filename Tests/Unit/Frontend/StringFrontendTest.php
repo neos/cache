@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Frontend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -24,7 +27,7 @@ use Neos\Cache\Tests\BaseTestCase;
  * Testcase for the string cache frontend
  *
  */
-class StringFrontendTest extends BaseTestCase
+final class StringFrontendTest extends BaseTestCase
 {
     /**
      * @test
@@ -154,10 +157,10 @@ class StringFrontendTest extends BaseTestCase
         $backend = $this->prepareTaggableBackend();
 
         $backend->expects($this->once())->method('findIdentifiersByTag')->with(self::equalTo($tag))->willReturn(($identifiers));
-        $backend->expects($this->exactly(2))->method('get')->will($this->onConsecutiveCalls('one value', 'two value'));
+        $backend->expects($this->exactly(2))->method('get')->willReturnOnConsecutiveCalls('one value', 'two value');
 
         $cache = new StringFrontend('StringFrontend', $backend);
-        self::assertEquals($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
+        self::assertSame($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
     }
 
     /**

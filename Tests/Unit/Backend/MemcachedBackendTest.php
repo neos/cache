@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -232,13 +235,13 @@ class MemcachedBackendTest extends BaseTestCase
     {
         $backendOptions = ['servers' => ['localhost:11211']];
 
-        $thisCache = $this->getMockBuilder(AbstractFrontend::class)->disableOriginalConstructor()->getMock();
-        $thisCache->expects($this->any())->method('getIdentifier')->willReturn(('thisCache'));
+        $thisCache = $this->createMock(AbstractFrontend::class);
+        $thisCache->method('getIdentifier')->willReturn(('thisCache'));
         $thisBackend = new MemcachedBackend($this->getEnvironmentConfiguration(), $backendOptions);
         $thisBackend->setCache($thisCache);
 
-        $thatCache = $this->getMockBuilder(AbstractFrontend::class)->disableOriginalConstructor()->getMock();
-        $thatCache->expects($this->any())->method('getIdentifier')->willReturn(('thatCache'));
+        $thatCache = $this->createMock(AbstractFrontend::class);
+        $thatCache->method('getIdentifier')->willReturn(('thatCache'));
         $thatBackend = new MemcachedBackend($this->getEnvironmentConfiguration(), $backendOptions);
         $thatBackend->setCache($thatCache);
 

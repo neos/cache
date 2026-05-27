@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Flow\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -24,7 +27,7 @@ use Neos\Cache\Frontend\VariableFrontend;
  * Testcase for the APCu cache backend
  */
 #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('apcu')]
-class ApcuBackendTest extends BaseTestCase
+final class ApcuBackendTest extends BaseTestCase
 {
     /**
      * Sets up this testcase
@@ -227,12 +230,12 @@ class ApcuBackendTest extends BaseTestCase
     public function flushRemovesOnlyOwnEntries()
     {
         $thisCache = $this->createMock(FrontendInterface::class);
-        $thisCache->expects($this->any())->method('getIdentifier')->willReturn(('thisCache'));
+        $thisCache->method('getIdentifier')->willReturn(('thisCache'));
         $thisBackend = new ApcuBackend($this->getEnvironmentConfiguration(), []);
         $thisBackend->setCache($thisCache);
 
         $thatCache = $this->createMock(FrontendInterface::class);
-        $thatCache->expects($this->any())->method('getIdentifier')->willReturn(('thatCache'));
+        $thatCache->method('getIdentifier')->willReturn(('thatCache'));
         $thatBackend = new ApcuBackend($this->getEnvironmentConfiguration(), []);
         $thatBackend->setCache($thatCache);
 
@@ -284,11 +287,11 @@ class ApcuBackendTest extends BaseTestCase
         natsort($entries);
         $i = 0;
         foreach ($entries as $entryIdentifier => $data) {
-            self::assertEquals(sprintf('entry-%s', $i), $entryIdentifier);
+            self::assertSame(sprintf('entry-%s', $i), $entryIdentifier);
             self::assertEquals('some data ' . $i, $data);
             $i++;
         }
-        self::assertEquals(100, $i);
+        self::assertSame(100, $i);
     }
 
     /**
@@ -318,7 +321,7 @@ class ApcuBackendTest extends BaseTestCase
         $data = \iterator_to_array(
             $cache->getIterator()
         );
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData'],
             $data
         );
@@ -344,7 +347,7 @@ class ApcuBackendTest extends BaseTestCase
         $data = \iterator_to_array(
             $cache->getIterator()
         );
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData', 'third' => 'thirdData'],
             $data
         );

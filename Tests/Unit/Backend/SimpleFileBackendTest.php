@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -25,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test case for the SimpleFileBackend
  */
-class SimpleFileBackendTest extends BaseTestCase
+final class SimpleFileBackendTest extends BaseTestCase
 {
     /**
      * @var FrontendInterface|MockObject
@@ -130,7 +133,7 @@ class SimpleFileBackendTest extends BaseTestCase
         mkdir('vfs://Temporary/Directory/OtherDirectory');
 
         $simpleFileBackend = $this->getSimpleFileBackend(['cacheDirectory' => 'vfs://Temporary/Directory/OtherDirectory']);
-        self::assertEquals('vfs://Temporary/Directory/OtherDirectory/', $simpleFileBackend->getCacheDirectory());
+        self::assertSame('vfs://Temporary/Directory/OtherDirectory/', $simpleFileBackend->getCacheDirectory());
     }
 
     /**
@@ -145,7 +148,7 @@ class SimpleFileBackendTest extends BaseTestCase
         mkdir('vfs://Temporary/Directory/Cache');
 
         $simpleFileBackend = $this->getSimpleFileBackend();
-        self::assertEquals('vfs://Temporary/Directory/Cache/Data/SomeCache/', $simpleFileBackend->getCacheDirectory());
+        self::assertSame('vfs://Temporary/Directory/Cache/Data/SomeCache/', $simpleFileBackend->getCacheDirectory());
     }
 
     /**
@@ -154,7 +157,7 @@ class SimpleFileBackendTest extends BaseTestCase
     public function aDedicatedCacheDirectoryIsUsedForCodeCaches(): void
     {
         /** @var PhpFrontend|MockObject $mockPhpCacheFrontend */
-        $mockPhpCacheFrontend = $this->getMockBuilder(\Neos\Cache\Frontend\PhpFrontend::class)->disableOriginalConstructor()->getMock();
+        $mockPhpCacheFrontend = $this->createMock(\Neos\Cache\Frontend\PhpFrontend::class);
         $mockPhpCacheFrontend->method('getIdentifier')->willReturn(('SomePhpCache'));
 
         // We need to create the directory here because vfs doesn't support touch() which is used by
@@ -162,7 +165,7 @@ class SimpleFileBackendTest extends BaseTestCase
         mkdir('vfs://Temporary/Directory/Cache');
 
         $simpleFileBackend = $this->getSimpleFileBackend([], $mockPhpCacheFrontend);
-        self::assertEquals('vfs://Temporary/Directory/Cache/Code/SomePhpCache/', $simpleFileBackend->getCacheDirectory());
+        self::assertSame('vfs://Temporary/Directory/Cache/Code/SomePhpCache/', $simpleFileBackend->getCacheDirectory());
     }
 
     /**
@@ -181,7 +184,7 @@ class SimpleFileBackendTest extends BaseTestCase
 
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename);
-        self::assertEquals($data, $retrievedData);
+        self::assertSame($data, $retrievedData);
     }
 
     /**
@@ -202,7 +205,7 @@ class SimpleFileBackendTest extends BaseTestCase
 
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename);
-        self::assertEquals($data2, $retrievedData);
+        self::assertSame($data2, $retrievedData);
     }
 
     /**
@@ -232,7 +235,7 @@ class SimpleFileBackendTest extends BaseTestCase
 
         self::assertFileExists($pathAndFilename);
         $retrievedData = file_get_contents($pathAndFilename);
-        self::assertEquals($data1, $retrievedData);
+        self::assertSame($data1, $retrievedData);
     }
 
     /**
@@ -334,24 +337,22 @@ class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function invalidEntryIdentifiers(): array
+    public static function invalidEntryIdentifiers(): \Iterator
     {
-        return [
-            'trailing slash' => ['/myIdentifer'],
-            'trailing dot and slash' => ['./myIdentifer'],
-            'trailing two dots and slash' => ['../myIdentifier'],
-            'trailing with multiple dots and slashes' => ['.././../myIdentifier'],
-            'slash in middle part' => ['my/Identifier'],
-            'dot and slash in middle part' => ['my./Identifier'],
-            'two dots and slash in middle part' => ['my../Identifier'],
-            'multiple dots and slashes in middle part' => ['my.././../Identifier'],
-            'pending slash' => ['myIdentifier/'],
-            'pending dot and slash' => ['myIdentifier./'],
-            'pending dots and slash' => ['myIdentifier../'],
-            'pending multiple dots and slashes' => ['myIdentifier.././../'],
-        ];
+        yield 'trailing slash' => ['/myIdentifer'];
+        yield 'trailing dot and slash' => ['./myIdentifer'];
+        yield 'trailing two dots and slash' => ['../myIdentifier'];
+        yield 'trailing with multiple dots and slashes' => ['.././../myIdentifier'];
+        yield 'slash in middle part' => ['my/Identifier'];
+        yield 'dot and slash in middle part' => ['my./Identifier'];
+        yield 'two dots and slash in middle part' => ['my../Identifier'];
+        yield 'multiple dots and slashes in middle part' => ['my.././../Identifier'];
+        yield 'pending slash' => ['myIdentifier/'];
+        yield 'pending dot and slash' => ['myIdentifier./'];
+        yield 'pending dots and slash' => ['myIdentifier../'];
+        yield 'pending multiple dots and slashes' => ['myIdentifier.././../'];
     }
 
     /**
@@ -538,11 +539,11 @@ class SimpleFileBackendTest extends BaseTestCase
         natsort($entries);
         $i = 0;
         foreach ($entries as $entryIdentifier => $data) {
-            self::assertEquals(sprintf('entry-%s', $i), $entryIdentifier);
+            self::assertSame(sprintf('entry-%s', $i), $entryIdentifier);
             self::assertEquals('some data ' . $i, $data);
             $i++;
         }
-        self::assertEquals(100, $i);
+        self::assertSame(100, $i);
     }
 
     /**
@@ -566,7 +567,7 @@ class SimpleFileBackendTest extends BaseTestCase
         $backend->set('second', 'secondData');
 
         $data = \iterator_to_array($backend);
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData'],
             $data
         );
@@ -586,7 +587,7 @@ class SimpleFileBackendTest extends BaseTestCase
         $backend->set('third', 'thirdData');
 
         $data = \iterator_to_array($backend);
-        self::assertEquals(
+        self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData', 'third' => 'thirdData'],
             $data
         );

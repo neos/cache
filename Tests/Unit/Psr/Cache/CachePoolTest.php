@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Psr\Cache;
 
 /*
@@ -23,23 +26,20 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Testcase for the PSR-6 cache frontend
  *
  */
-class CachePoolTest extends BaseTestCase
+final class CachePoolTest extends BaseTestCase
 {
-    public static function validIdentifiersDataProvider(): array
+    public static function validIdentifiersDataProvider(): \Iterator
     {
-        return [
-            ['short'],
-            ['SomeValidIdentifier'],
-            ['withNumbers0123456789'],
-            ['withUnder_score'],
-            ['with.dot'],
-
-            // The following tests exceed the minimum requirements of the PSR-6 keys (@see https://www.php-fig.org/psr/psr-6/#definitions)
-            ['dashes-are-allowed'],
-            ['percent%sign'],
-            ['amper&sand'],
-            ['a-string-that-exceeds-the-psr-minimum-maxlength-of-sixtyfour-but-is-shorter-than-twohundredandfifty-characters'],
-        ];
+        yield ['short'];
+        yield ['SomeValidIdentifier'];
+        yield ['withNumbers0123456789'];
+        yield ['withUnder_score'];
+        yield ['with.dot'];
+        // The following tests exceed the minimum requirements of the PSR-6 keys (@see https://www.php-fig.org/psr/psr-6/#definitions)
+        yield ['dashes-are-allowed'];
+        yield ['percent%sign'];
+        yield ['amper&sand'];
+        yield ['a-string-that-exceeds-the-psr-minimum-maxlength-of-sixtyfour-but-is-shorter-than-twohundredandfifty-characters'];
     }
 
     /**
@@ -48,18 +48,16 @@ class CachePoolTest extends BaseTestCase
      */
     public function validIdentifiers(string $identifier): void
     {
-        $mockBackend = $this->getMockBuilder(BackendInterface::class)->getMock();
+        $mockBackend = $this->createStub(BackendInterface::class);
         $cachePool = new CachePool($identifier, $mockBackend);
         self::assertInstanceOf(CachePool::class, $cachePool);
     }
 
-    public static function invalidIdentifiersDataProvider(): array
+    public static function invalidIdentifiersDataProvider(): \Iterator
     {
-        return [
-            [''],
-            ['späcialcharacters'],
-            ['a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-which-is-pretty-large-as-it-turns-out-so-i-repeat-a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-still-not-there-wow-crazy-flow-rocks-though'],
-        ];
+        yield [''];
+        yield ['späcialcharacters'];
+        yield ['a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-which-is-pretty-large-as-it-turns-out-so-i-repeat-a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-still-not-there-wow-crazy-flow-rocks-though'];
     }
 
     /**
@@ -68,7 +66,7 @@ class CachePoolTest extends BaseTestCase
      */
     public function invalidIdentifiers(string $identifier): void
     {
-        $mockBackend = $this->getMockBuilder(BackendInterface::class)->getMock();
+        $mockBackend = $this->createStub(BackendInterface::class);
 
         $this->expectException(\InvalidArgumentException::class);
         new CachePool($identifier, $mockBackend);
@@ -141,7 +139,7 @@ class CachePoolTest extends BaseTestCase
     {
         $theString = 'Just some value';
         $backend = $this->prepareDefaultBackend();
-        $backend->expects($this->any())->method('get')->willReturn(serialize($theString));
+        $backend->method('get')->willReturn(serialize($theString));
 
         $cache = new CachePool('CachePool', $backend);
         self::assertEquals(true, $cache->getItem('PsrCacheTest')->isHit(), 'The item should have been a hit but is not');

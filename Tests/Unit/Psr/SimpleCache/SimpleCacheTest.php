@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Psr\SimpleCache;
 
 use Neos\Cache\Backend\BackendInterface;
@@ -10,7 +13,7 @@ use Neos\Cache\Tests\BaseTestCase;
 /**
  * Tests the PSR-16 simple cache (frontend)
  */
-class SimpleCacheTest extends BaseTestCase
+final class SimpleCacheTest extends BaseTestCase
 {
     /**
      * @var BackendInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -22,7 +25,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     protected function setUp(): void
     {
-        $this->mockBackend = $this->getMockBuilder(BackendInterface::class)->getMock();
+        $this->mockBackend = $this->createMock(BackendInterface::class);
     }
 
     /**
@@ -59,7 +62,7 @@ class SimpleCacheTest extends BaseTestCase
     public function setThrowsExceptionOnBackendError()
     {
         $this->expectException(Exception::class);
-        $this->mockBackend->expects($this->any())->method('set')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
+        $this->mockBackend->method('set')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
         $simpleCache = $this->createSimpleCache();
         $simpleCache->set('validkey', 'valid data');
     }
@@ -69,7 +72,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     public function setWillSetInBackendAndReturnBackendResponse()
     {
-        $this->mockBackend->expects($this->any())->method('set');
+        $this->mockBackend->method('set');
         $simpleCache = $this->createSimpleCache();
         $result = $simpleCache->set('validkey', 'valid data');
         self::assertEquals(true, $result);
@@ -91,7 +94,7 @@ class SimpleCacheTest extends BaseTestCase
     public function getThrowsExceptionOnBackendError()
     {
         $this->expectException(Exception::class);
-        $this->mockBackend->expects($this->any())->method('get')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
+        $this->mockBackend->method('get')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
         $simpleCache = $this->createSimpleCache();
         $simpleCache->get('validkey', false);
     }
@@ -102,7 +105,7 @@ class SimpleCacheTest extends BaseTestCase
     public function getReturnsDefaultValueIfBackendFoundNoEntry()
     {
         $defaultValue = 'fallback';
-        $this->mockBackend->expects($this->any())->method('get')->willReturn(false);
+        $this->mockBackend->method('get')->willReturn(false);
         $simpleCache = $this->createSimpleCache();
         $result = $simpleCache->get('validkey', $defaultValue);
         self::assertEquals($defaultValue, $result);
@@ -115,7 +118,7 @@ class SimpleCacheTest extends BaseTestCase
     public function getReturnsBackendResponseAfterUnserialising()
     {
         $cachedValue = [1, 2, 3];
-        $this->mockBackend->expects($this->any())->method('get')->willReturn(serialize($cachedValue));
+        $this->mockBackend->method('get')->willReturn(serialize($cachedValue));
         $simpleCache = $this->createSimpleCache();
         $result = $simpleCache->get('validkey');
         self::assertEquals($cachedValue, $result);
@@ -137,7 +140,7 @@ class SimpleCacheTest extends BaseTestCase
     public function deleteThrowsExceptionOnBackendError()
     {
         $this->expectException(Exception::class);
-        $this->mockBackend->expects($this->any())->method('remove')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
+        $this->mockBackend->method('remove')->willThrowException(new Exception\InvalidDataException('Some other exception', 1234));
         $simpleCache = $this->createSimpleCache();
         $simpleCache->delete('validkey');
     }
@@ -157,7 +160,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     public function getMultipleGetsMultipleValues()
     {
-        $this->mockBackend->expects($this->any())->method('get')->willReturnMap([
+        $this->mockBackend->method('get')->willReturnMap([
             ['validKey', serialize('entry1')],
             ['another', serialize('entry2')]
         ]);
@@ -171,7 +174,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     public function getMultipleFillsWithDefault()
     {
-        $this->mockBackend->expects($this->any())->method('get')->willReturnMap([
+        $this->mockBackend->method('get')->willReturnMap([
             ['validKey', serialize('entry1')],
             ['notExistingEntry', false]
         ]);
@@ -197,7 +200,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     public function setMultipleReturnsResult()
     {
-        $this->mockBackend->expects($this->any())->method('set')->willReturnMap([
+        $this->mockBackend->method('set')->willReturnMap([
             ['validKey', 'value', true],
             ['another', 'value', true]
         ]);
@@ -232,7 +235,7 @@ class SimpleCacheTest extends BaseTestCase
      */
     public function hasReturnsWhatTheBackendSays()
     {
-        $this->mockBackend->expects($this->any())->method('has')->willReturnMap([
+        $this->mockBackend->method('has')->willReturnMap([
             ['existing', true],
             ['notExisting', false]
         ]);
