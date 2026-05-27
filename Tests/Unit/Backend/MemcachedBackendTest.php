@@ -278,12 +278,11 @@ class MemcachedBackendTest extends BaseTestCase
      */
     protected function setUpBackend(array $backendOptions = [])
     {
-        $cache = $this->createMock(FrontendInterface::class, [], [], '', false);
         if ($backendOptions == []) {
             $backendOptions = ['servers' => ['localhost:11211']];
         }
         $backend = new MemcachedBackend($this->getEnvironmentConfiguration(), $backendOptions);
-        $backend->setCache($cache);
+        $backend->setCache($this->createStub(FrontendInterface::class, [], [], '', false));
 
         return $backend;
     }

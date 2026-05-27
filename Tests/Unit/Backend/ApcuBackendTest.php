@@ -424,9 +424,8 @@ final class ApcuBackendTest extends BaseTestCase
      */
     protected function setUpBackend()
     {
-        $cache = $this->createMock(FrontendInterface::class);
         $backend = new ApcuBackend($this->getEnvironmentConfiguration(), []);
-        $backend->setCache($cache);
+        $backend->setCache($this->createStub(FrontendInterface::class));
         $backend->flush(); // I'd rather start with a clean directory in the first place, but I can't get the "vfs" thing to work
 
         return $backend;
