@@ -52,7 +52,7 @@ final class ApcuBackendTest extends BaseTestCase
         $this->expectException(Exception::class);
         $backend = new ApcuBackend($this->getEnvironmentConfiguration(), []);
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
     }
 
@@ -63,7 +63,7 @@ final class ApcuBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $inCache = $backend->has($identifier);
         self::assertTrue($inCache, 'APCu backend failed to set and check entry');
@@ -76,7 +76,7 @@ final class ApcuBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $fetchedData = $backend->get($identifier);
         self::assertEquals($data, $fetchedData, 'APCu backend failed to set and retrieve data');
@@ -89,7 +89,7 @@ final class ApcuBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $backend->remove($identifier);
         $inCache = $backend->has($identifier);
@@ -103,7 +103,7 @@ final class ApcuBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $otherData = 'some other data';
         $backend->set($identifier, $otherData);
@@ -119,7 +119,7 @@ final class ApcuBackendTest extends BaseTestCase
         $backend = $this->setUpBackend();
 
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data, ['UnitTestTag%tag1', 'UnitTestTag%tag2']);
 
         $retrieved = $backend->findIdentifiersByTag('UnitTestTag%tag1');
@@ -137,7 +137,7 @@ final class ApcuBackendTest extends BaseTestCase
         $backend = $this->setUpBackend();
 
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data, ['UnitTestTag%tag1', 'UnitTestTag%tagX']);
         $backend->set($identifier, $data, ['UnitTestTag%tag3']);
 
@@ -151,7 +151,7 @@ final class ApcuBackendTest extends BaseTestCase
     public function hasReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
-        $identifier = 'NonExistingIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'NonExistingIdentifier' . md5(uniqid((string)mt_rand(), true));
         $inCache = $backend->has($identifier);
         self::assertFalse($inCache, '"has" did not return false when checking on non existing identifier');
     }
@@ -162,7 +162,7 @@ final class ApcuBackendTest extends BaseTestCase
     public function removeReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
-        $identifier = 'NonExistingIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'NonExistingIdentifier' . md5(uniqid((string)mt_rand(), true));
         $inCache = $backend->remove($identifier);
         self::assertFalse($inCache, '"remove" did not return false when checking on non existing identifier');
     }
@@ -257,7 +257,7 @@ final class ApcuBackendTest extends BaseTestCase
         $backend = $this->setUpBackend();
 
         $data = str_repeat('abcde', 1024 * 1024);
-        $identifier = 'tooLargeData' . md5(uniqid(mt_rand(), true));
+        $identifier = 'tooLargeData' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
 
         self::assertTrue($backend->has($identifier));

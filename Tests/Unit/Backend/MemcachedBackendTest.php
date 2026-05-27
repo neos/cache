@@ -54,7 +54,7 @@ class MemcachedBackendTest extends BaseTestCase
         $backendOptions = ['servers' => ['localhost:11211']];
         $backend = new MemcachedBackend($this->getEnvironmentConfiguration(), $backendOptions);
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
     }
 
@@ -75,7 +75,7 @@ class MemcachedBackendTest extends BaseTestCase
         $this->expectException(Exception::class);
         $backend = $this->setUpBackend(['servers' => ['localhost:11212']]);
         $data = 'Somedata';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
     }
 
@@ -86,7 +86,7 @@ class MemcachedBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $inCache = $backend->has($identifier);
         self::assertTrue($inCache, 'Memcache failed to set and check entry');
@@ -99,7 +99,7 @@ class MemcachedBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $fetchedData = $backend->get($identifier);
         self::assertEquals($data, $fetchedData, 'Memcache failed to set and retrieve data');
@@ -112,7 +112,7 @@ class MemcachedBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $backend->remove($identifier);
         $inCache = $backend->has($identifier);
@@ -126,7 +126,7 @@ class MemcachedBackendTest extends BaseTestCase
     {
         $backend = $this->setUpBackend();
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data);
         $otherData = 'some other data';
         $backend->set($identifier, $otherData);
@@ -142,7 +142,7 @@ class MemcachedBackendTest extends BaseTestCase
         $backend = $this->setUpBackend();
 
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data, ['UnitTestTag%tag1', 'UnitTestTag%tag2']);
 
         $retrieved = $backend->findIdentifiersByTag('UnitTestTag%tag1');
@@ -160,7 +160,7 @@ class MemcachedBackendTest extends BaseTestCase
         $backend = $this->setUpBackend();
 
         $data = 'Some data';
-        $identifier = 'MyIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'MyIdentifier' . md5(uniqid((string)mt_rand(), true));
         $backend->set($identifier, $data, ['UnitTestTag%tag1', 'UnitTestTag%tagX']);
         $backend->set($identifier, $data, ['UnitTestTag%tag3']);
 
@@ -174,7 +174,7 @@ class MemcachedBackendTest extends BaseTestCase
     public function hasReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
-        $identifier = 'NonExistingIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'NonExistingIdentifier' . md5(uniqid((string)mt_rand(), true));
         $inCache = $backend->has($identifier);
         self::assertFalse($inCache, '"has" did not return false when checking on non existing identifier');
     }
@@ -185,7 +185,7 @@ class MemcachedBackendTest extends BaseTestCase
     public function removeReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
-        $identifier = 'NonExistingIdentifier' . md5(uniqid(mt_rand(), true));
+        $identifier = 'NonExistingIdentifier' . md5(uniqid((string)mt_rand(), true));
         $inCache = $backend->remove($identifier);
         self::assertFalse($inCache, '"remove" did not return false when checking on non existing identifier');
     }
