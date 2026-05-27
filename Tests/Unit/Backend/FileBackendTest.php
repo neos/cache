@@ -704,6 +704,8 @@ class FileBackendTest extends BaseTestCase
             if ($matcher->numberOfInvocations() === 3) {
                 $this->assertSame('baz', $parameters[0]);
             }
+
+            return true;
         });
 
         $backend->flushByTag('UnitTestTag%special');
@@ -728,6 +730,8 @@ class FileBackendTest extends BaseTestCase
             if ($matcher->numberOfInvocations() === 3) {
                 $this->assertSame('baz', $parameters[0]);
             }
+
+            return true;
         });
 
         $backend->flushByTags(['UnitTestTag%special']);
