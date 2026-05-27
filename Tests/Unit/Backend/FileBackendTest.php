@@ -695,13 +695,13 @@ class FileBackendTest extends BaseTestCase
         $backend->expects($this->once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->willReturn((['foo', 'bar', 'baz']));
         $matcher = self::atLeast(3);
         $backend->expects($matcher)->method('remove')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->getInvocationCount() === 1) {
+            if ($matcher->numberOfInvocations() === 1) {
                 $this->assertSame('foo', $parameters[0]);
             }
-            if ($matcher->getInvocationCount() === 2) {
+            if ($matcher->numberOfInvocations() === 2) {
                 $this->assertSame('bar', $parameters[0]);
             }
-            if ($matcher->getInvocationCount() === 3) {
+            if ($matcher->numberOfInvocations() === 3) {
                 $this->assertSame('baz', $parameters[0]);
             }
         });
@@ -719,13 +719,13 @@ class FileBackendTest extends BaseTestCase
         $backend->expects(self::once())->method('findIdentifiersByTags')->with(['UnitTestTag%special'])->will(self::returnValue(['foo', 'bar', 'baz']));
         $matcher = self::atLeast(3);
         $backend->expects($matcher)->method('remove')->willReturnCallback(function (...$parameters) use ($matcher) {
-            if ($matcher->getInvocationCount() === 1) {
+            if ($matcher->numberOfInvocations() === 1) {
                 $this->assertSame('foo', $parameters[0]);
             }
-            if ($matcher->getInvocationCount() === 2) {
+            if ($matcher->numberOfInvocations() === 2) {
                 $this->assertSame('bar', $parameters[0]);
             }
-            if ($matcher->getInvocationCount() === 3) {
+            if ($matcher->numberOfInvocations() === 3) {
                 $this->assertSame('baz', $parameters[0]);
             }
         });
