@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Functional\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -30,7 +33,7 @@ use Neos\Cache\Frontend\FrontendInterface;
  *
  * Tests require Redis listening on 127.0.0.1:6379.
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
+#[RequiresPhpExtension('redis')]
 final class RedisBackendTest extends BaseTestCase
 {
     /**
@@ -78,18 +81,14 @@ final class RedisBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAddsCacheEntry()
     {
         $this->backend->set('some_entry', 'foo');
         self::assertEquals('foo', $this->backend->get('some_entry'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAddsTags()
     {
         $this->backend->set('some_entry', 'foo', ['tag1', 'tag2']);
@@ -107,9 +106,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertEquals(['some_other_entry'], $this->backend->findIdentifiersByTag('tag3'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDoesNotAddMultipleEntries()
     {
         $this->backend->set('some_entry', 'foo');
@@ -123,9 +120,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertSame(['some_entry'], $entryIdentifiers);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function cacheIsIterable()
     {
         for ($i = 0; $i < 100; $i++) {
@@ -143,9 +138,7 @@ final class RedisBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function freezeFreezesTheCache()
     {
         self::assertFalse($this->backend->isFrozen());
@@ -156,9 +149,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertTrue($this->backend->isFrozen());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushUnfreezesTheCache()
     {
         self::assertFalse($this->backend->isFrozen());
@@ -168,9 +159,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertFalse($this->backend->isFrozen());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagFlushesEntryByTag()
     {
         for ($i = 0; $i < 10; $i++) {
@@ -188,9 +177,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertCount(10, $this->backend->findIdentifiersByTag('tag2'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagsFlushesEntryByTags()
     {
         for ($i = 0; $i < 10; $i++) {
@@ -213,9 +200,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertCount(0, $this->backend->findIdentifiersByTag('tag3'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagRemovesEntries()
     {
         $this->backend->set('some_entry', 'foo', ['tag1', 'tag2']);
@@ -230,9 +215,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertSame([], $entryIdentifiers);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagsRemovesEntries()
     {
         $this->backend->set('some_entry', 'foo', ['tag1', 'tag2']);
@@ -248,9 +231,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertSame([], $entryIdentifiers);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushFlushesCache()
     {
         for ($i = 0; $i < 10; $i++) {
@@ -261,9 +242,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertFalse($this->backend->has('entry_5'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeRemovesEntryFromCache()
     {
         for ($i = 0; $i < 10; $i++) {
@@ -287,9 +266,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertCount(9, $actualEntries);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function expiredEntriesAreSkippedWhenIterating()
     {
         $this->backend->set('entry1', 'foo', [], 1);

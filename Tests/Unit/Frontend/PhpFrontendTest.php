@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Frontend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -28,9 +30,7 @@ use Neos\Cache\Frontend\StringFrontend;
  */
 final class PhpFrontendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function setChecksIfTheIdentifierIsValid()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -42,9 +42,7 @@ final class PhpFrontendTest extends BaseTestCase
         $cache->set('foo', 'bar');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesPhpSourceCodeTagsAndLifetimeToBackend()
     {
         $originalSourceCode = 'return "hello world!";';
@@ -61,9 +59,7 @@ final class PhpFrontendTest extends BaseTestCase
         $cache->set('Foo-Bar', $originalSourceCode, ['tags'], 1234);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsInvalidDataExceptionOnNonStringValues()
     {
         $this->expectException(InvalidDataException::class);
@@ -74,9 +70,7 @@ final class PhpFrontendTest extends BaseTestCase
         $cache->set('Foo-Bar', []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requireOnceCallsTheBackendsRequireOnceMethod()
     {
         $mockBackend = $this->createMock(PhpCapableBackendInterface::class);

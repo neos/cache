@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -26,7 +29,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Testcase for the PDO cache backend
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo_sqlite')]
+#[RequiresPhpExtension('pdo_sqlite')]
 final class PdoBackendTest extends BaseTestCase
 {
     /**
@@ -39,9 +42,7 @@ final class PdoBackendTest extends BaseTestCase
      */
     protected $fixtureDB;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsExceptionIfNoFrontEndHasBeenSet()
     {
         $this->expectException(Exception::class);
@@ -51,9 +52,7 @@ final class PdoBackendTest extends BaseTestCase
         $backend->set($identifier, $data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToSetAndCheckExistenceInCache()
     {
         $backend = $this->setUpBackend();
@@ -63,9 +62,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertTrue($backend->has($identifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToSetAndGetEntry()
     {
         $backend = $this->setUpBackend();
@@ -76,9 +73,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEquals($data, $fetchedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToRemoveEntryFromCache()
     {
         $backend = $this->setUpBackend();
@@ -89,9 +84,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertFalse($backend->has($identifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToOverwriteAnEntryInTheCache()
     {
         $backend = $this->setUpBackend();
@@ -104,9 +97,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEquals($otherData, $fetchedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findIdentifiersByTagFindsSetEntries()
     {
         $backend = $this->setUpBackend();
@@ -122,9 +113,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEquals($entryIdentifier, $retrieved[0]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setRemovesTagsFromPreviousSet()
     {
         $backend = $this->setUpBackend();
@@ -138,9 +127,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEquals([], $retrieved);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -148,9 +135,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertFalse($backend->has($identifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -158,9 +143,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertFalse($backend->remove($identifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagRemovesCacheEntriesWithSpecifiedTag()
     {
         $backend = $this->setUpBackend();
@@ -177,9 +160,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertTrue($backend->has('PdoBackendTest3'), 'PdoBackendTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagsRemovesCacheEntriesWithSpecifiedTags()
     {
         $backend = $this->setUpBackend();
@@ -196,9 +177,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertTrue($backend->has('PdoBackendTest3'), 'PdoBackendTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesAllCacheEntries()
     {
         $backend = $this->setUpBackend();
@@ -215,9 +194,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertFalse($backend->has('PdoBackendTest3'), 'PdoBackendTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesOnlyOwnEntries()
     {
         $thisCache = $this->createMock(FrontendInterface::class);
@@ -238,9 +215,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertFalse($thatBackend->has('thatEntry'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverEmptyCacheYieldsNoData()
     {
         $backend = $this->setUpBackend();
@@ -248,9 +223,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverNotEmptyCacheYieldsData()
     {
         $backend = $this->setUpBackend();
@@ -265,9 +238,7 @@ final class PdoBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataIsSet()
     {
         $backend = $this->setUpBackend();
@@ -285,9 +256,7 @@ final class PdoBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataFlushed()
     {
         $backend = $this->setUpBackend();
@@ -301,9 +270,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataFlushedByTag()
     {
         $backend = $this->setUpBackend();
@@ -317,9 +284,7 @@ final class PdoBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataGetsRemoved()
     {
         $backend = $this->setUpBackend();

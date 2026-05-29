@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -26,11 +31,11 @@ use Neos\Cache\Tests\BaseTestCase;
  *
  * These unit tests rely on a mocked redis client.
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
+#[RequiresPhpExtension('redis')]
 final class RedisBackendTest extends BaseTestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Redis
+     * @var MockObject|\Redis
      */
     private $redis;
 
@@ -70,9 +75,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->inject($this->backend, 'frozen', false);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findIdentifiersByTagInvokesRedis(): void
     {
         $this->redis->expects($this->once())
@@ -83,9 +86,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->assertEquals(['entry_1', 'entry_2'], $this->backend->findIdentifiersByTag('some_tag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function freezeInvokesRedis(): void
     {
         $this->redis->method('exec')
@@ -105,9 +106,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->backend->freeze();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setUsesDefaultLifetimeIfNotProvided(): void
     {
         $defaultLifetime = random_int(1, 9999);
@@ -125,9 +124,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->backend->set('foo', 'bar');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setUsesProvidedLifetime(): void
     {
         $defaultLifetime = 3600;
@@ -145,9 +142,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->backend->set('foo', 'bar', [], 1600);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAddsEntryToRedis(): void
     {
         $this->redis->method('multi')
@@ -161,9 +156,7 @@ final class RedisBackendTest extends BaseTestCase
         $this->backend->set('entry_1', 'foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getInvokesRedis(): void
     {
         $this->redis->expects($this->once())
@@ -174,9 +167,7 @@ final class RedisBackendTest extends BaseTestCase
         self::assertEquals('bar', $this->backend->get('foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasInvokesRedis(): void
     {
         $this->redis->expects($this->once())
@@ -188,10 +179,10 @@ final class RedisBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
-     * @dataProvider writingOperationsProvider
      * @param string $method
      */
+    #[DataProvider('writingOperationsProvider')]
+    #[Test]
     public function writingOperationsThrowAnExceptionIfCacheIsFrozen(string $method): void
     {
         $this->expectException(\RuntimeException::class);
@@ -205,10 +196,10 @@ final class RedisBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
-     * @dataProvider batchWritingOperationsProvider
      * @param string $method
      */
+    #[DataProvider('batchWritingOperationsProvider')]
+    #[Test]
     public function batchWritingOperationsThrowAnExceptionIfCacheIsFrozen(string $method): void
     {
         $this->expectException(\RuntimeException::class);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Frontend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -35,9 +37,7 @@ final class AbstractFrontendTest extends BaseTestCase
         $this->mockBackend = $this->getMockBuilder(AbstractBackend::class)->onlyMethods(['get', 'set', 'has', 'remove', 'flush', 'collectGarbage'])->disableOriginalConstructor()->getMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function theConstructorAcceptsValidIdentifiers()
     {
         foreach (['x', 'someValue', '123fivesixseveneight', 'some&', 'ab_cd%', rawurlencode('resource://some/äöü$&% sadf'), str_repeat('x', 250)] as $identifier) {
@@ -46,9 +46,7 @@ final class AbstractFrontendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function theConstructorRejectsInvalidIdentifiers()
     {
         foreach (['', 'abc def', 'foo!', 'bar:', 'some/', 'bla*', 'one+', 'äöü', str_repeat('x', 251), 'x$', '\\a', 'b#'] as $identifier) {
@@ -61,9 +59,7 @@ final class AbstractFrontendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushCallsBackend()
     {
         $identifier = 'someCacheIdentifier';
@@ -78,9 +74,7 @@ final class AbstractFrontendTest extends BaseTestCase
         $cache->flush();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagRejectsInvalidTags()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -95,9 +89,7 @@ final class AbstractFrontendTest extends BaseTestCase
         $cache->flushByTag('SomeInvalid\Tag');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagCallsBackendIfItIsATaggableBackend()
     {
         $tag = 'sometag';
@@ -112,9 +104,7 @@ final class AbstractFrontendTest extends BaseTestCase
         $cache->flushByTag($tag);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function collectGarbageCallsBackend()
     {
         $identifier = 'someCacheIdentifier';
@@ -131,9 +121,7 @@ final class AbstractFrontendTest extends BaseTestCase
         $cache->collectGarbage();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidEntryIdentifiersAreRecognizedAsInvalid()
     {
         $identifier = 'someCacheIdentifier';
@@ -149,9 +137,7 @@ final class AbstractFrontendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validEntryIdentifiersAreRecognizedAsValid()
     {
         $identifier = 'someCacheIdentifier';
@@ -166,9 +152,7 @@ final class AbstractFrontendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidTagsAreRecognizedAsInvalid()
     {
         $identifier = 'someCacheIdentifier';
@@ -183,9 +167,7 @@ final class AbstractFrontendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validTagsAreRecognizedAsValid()
     {
         $identifier = 'someCacheIdentifier';

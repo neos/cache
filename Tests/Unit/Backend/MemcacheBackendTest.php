@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+
 include_once('MemcachedBackendTest.php');
 
 /*
@@ -18,7 +20,7 @@ include_once('MemcachedBackendTest.php');
 /**
  * Testcase for the cache to memcache backend
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('memcache')]
+#[RequiresPhpExtension('memcache')]
 final class MemcacheBackendTest extends MemcachedBackendTest
 {
 }

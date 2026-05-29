@@ -23,6 +23,8 @@ use Neos\Cache\Tests\BaseTestCase;
 use org\bovigo\vfs\vfsStream;
 use Neos\Cache\Frontend\FrontendInterface;
 use Neos\Cache\Frontend\PhpFrontend;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -78,9 +80,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         return $simpleFileBackend;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setCacheThrowsExceptionOnNonWritableDirectory(): void
     {
         $this->expectException(Exception::class);
@@ -98,9 +98,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $this->getSimpleFileBackend();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsExceptionIfCachePathLengthExceedsMaximumPathLength(): void
     {
         $this->expectException(Exception::class);
@@ -120,9 +118,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $backend->set($entryIdentifier, 'cache data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setCacheDirectoryAllowsToSetTheCurrentCacheDirectory(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('SomeCache'));
@@ -136,9 +132,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame('vfs://Temporary/Directory/OtherDirectory/', $simpleFileBackend->getCacheDirectory());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getCacheDirectoryReturnsTheCurrentCacheDirectory(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('SomeCache'));
@@ -151,13 +145,11 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame('vfs://Temporary/Directory/Cache/Data/SomeCache/', $simpleFileBackend->getCacheDirectory());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function aDedicatedCacheDirectoryIsUsedForCodeCaches(): void
     {
         /** @var PhpFrontend|MockObject $mockPhpCacheFrontend */
-        $mockPhpCacheFrontend = $this->createMock(\Neos\Cache\Frontend\PhpFrontend::class);
+        $mockPhpCacheFrontend = $this->createMock(PhpFrontend::class);
         $mockPhpCacheFrontend->method('getIdentifier')->willReturn(('SomePhpCache'));
 
         // We need to create the directory here because vfs doesn't support touch() which is used by
@@ -168,9 +160,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame('vfs://Temporary/Directory/Cache/Code/SomePhpCache/', $simpleFileBackend->getCacheDirectory());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setReallySavesToTheSpecifiedDirectory(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -187,9 +177,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame($data, $retrievedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setOverwritesAnAlreadyExistingCacheEntryForTheSameIdentifier(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -208,9 +196,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame($data2, $retrievedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDoesNotOverwriteIfLockNotAcquired(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -238,9 +224,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame($data1, $retrievedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReturnsContentOfTheCorrectCacheFile(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -256,9 +240,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame($data2, $simpleFileBackend->get($entryIdentifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getSupportsEmptyData(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -272,9 +254,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame($data, $simpleFileBackend->get($entryIdentifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReturnsFalseForDeletedFiles(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -290,9 +270,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertFalse($simpleFileBackend->get($entryIdentifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsTrueIfAnEntryExists(): void
     {
         $entryIdentifier = 'SimpleFileBackendTest';
@@ -303,9 +281,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertTrue($simpleFileBackend->has($entryIdentifier));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsFalseIfAnEntryDoesNotExist(): void
     {
         $simpleFileBackend = $this->getSimpleFileBackend();
@@ -314,9 +290,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertFalse($simpleFileBackend->has('SomeNonExistingEntryIdentifier'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeReallyRemovesACacheEntry(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -356,10 +330,10 @@ final class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @param string $identifier
-     * @dataProvider invalidEntryIdentifiers
      */
+    #[DataProvider('invalidEntryIdentifiers')]
+    #[Test]
     public function setThrowsExceptionForInvalidIdentifier($identifier): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -368,10 +342,10 @@ final class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @param string $identifier
-     * @dataProvider invalidEntryIdentifiers
      */
+    #[DataProvider('invalidEntryIdentifiers')]
+    #[Test]
     public function getThrowsExceptionForInvalidIdentifier($identifier): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -380,10 +354,10 @@ final class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @param string $identifier
-     * @dataProvider invalidEntryIdentifiers
      */
+    #[DataProvider('invalidEntryIdentifiers')]
+    #[Test]
     public function hasThrowsExceptionForInvalidIdentifier($identifier): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -392,10 +366,10 @@ final class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @param string $identifier
-     * @dataProvider invalidEntryIdentifiers
      */
+    #[DataProvider('invalidEntryIdentifiers')]
+    #[Test]
     public function removeThrowsExceptionForInvalidIdentifier($identifier): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -404,10 +378,10 @@ final class SimpleFileBackendTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @param string $identifier
-     * @dataProvider invalidEntryIdentifiers
      */
+    #[DataProvider('invalidEntryIdentifiers')]
+    #[Test]
     public function requireOnceThrowsExceptionForInvalidIdentifier($identifier): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -415,9 +389,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $simpleFileBackend->requireOnce($identifier);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requireOnceIncludesAndReturnsResultOfIncludedPhpFile(): void
     {
         $entryIdentifier = 'SomeValidPhpEntry';
@@ -431,9 +403,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertEquals('foo', $loadedData);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requireOnceDoesNotSwallowExceptionsOfTheIncludedFile(): void
     {
         $this->expectException(\Exception::class);
@@ -444,9 +414,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $simpleFileBackend->requireOnce($entryIdentifier);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requireOnceDoesNotSwallowPhpWarningsOfTheIncludedFile(): void
     {
         set_error_handler(
@@ -467,9 +435,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $simpleFileBackend->requireOnce($entryIdentifier);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requireOnceDoesNotSwallowPhpNoticesOfTheIncludedFile(): void
     {
         set_error_handler(
@@ -490,9 +456,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         $simpleFileBackend->requireOnce($entryIdentifier);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesAllCacheEntries(): void
     {
         $this->mockCacheFrontend->method('getIdentifier')->willReturn(('UnitTestCache'));
@@ -519,9 +483,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertFalse($simpleFileBackend->has($entryIdentifier2));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function backendAllowsForIteratingOverEntries(): void
     {
         $simpleFileBackend = $this->getSimpleFileBackend();
@@ -546,9 +508,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertSame(100, $i);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverEmptyCacheYieldsNoData(): void
     {
         $backend = $this->getSimpleFileBackend();
@@ -556,9 +516,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverNotEmptyCacheYieldsData(): void
     {
         $backend = $this->getSimpleFileBackend();
@@ -573,9 +531,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataIsSet(): void
     {
         $backend = $this->getSimpleFileBackend();
@@ -593,9 +549,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataGetsRemoved(): void
     {
         $backend = $this->getSimpleFileBackend();
@@ -609,9 +563,7 @@ final class SimpleFileBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataFlushed(): void
     {
         $backend = $this->getSimpleFileBackend();

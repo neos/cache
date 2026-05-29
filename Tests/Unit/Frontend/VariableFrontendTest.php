@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Frontend;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -29,9 +33,7 @@ use Neos\Cache\Frontend\VariableFrontend;
  */
 final class VariableFrontendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function setChecksIfTheIdentifierIsValid()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -43,9 +45,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->set('foo', 'bar');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesSerializedStringToBackend()
     {
         $theString = 'Just some value';
@@ -56,9 +56,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->set('VariableCacheTest', $theString);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesSerializedArrayToBackend()
     {
         $theArray = ['Just some value', 'and another one.'];
@@ -69,9 +67,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->set('VariableCacheTest', $theArray);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesLifetimeToBackend()
     {
         $theString = 'Just some value';
@@ -83,10 +79,8 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->set('VariableCacheTest', $theString, [], $theLifetime);
     }
 
-    /**
-     * @test
-     */
-    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
+    #[RequiresPhpExtension('igbinary')]
+    #[Test]
     public function setUsesIgBinarySerializeIfAvailable()
     {
         $theString = 'Just some value';
@@ -98,9 +92,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->set('VariableCacheTest', $theString);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFetchesStringValueFromBackend()
     {
         $backend = $this->prepareDefaultBackend();
@@ -110,9 +102,7 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertEquals('Just some value', $cache->get('VariableCacheTest'), 'The returned value was not the expected string.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFetchesArrayValueFromBackend()
     {
         $theArray = ['Just some value', 'and another one.'];
@@ -123,9 +113,7 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertEquals($theArray, $cache->get('VariableCacheTest'), 'The returned value was not the expected unserialized array.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFetchesFalseBooleanValueFromBackend()
     {
         $backend = $this->prepareDefaultBackend();
@@ -135,10 +123,8 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertFalse($cache->get('VariableCacheTest'), 'The returned value was not the false.');
     }
 
-    /**
-     * @test
-     */
-    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
+    #[RequiresPhpExtension('igbinary')]
+    #[Test]
     public function getUsesIgBinaryIfAvailable()
     {
         $theArray = ['Just some value', 'and another one.'];
@@ -151,9 +137,7 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertEquals($theArray, $cache->get('VariableCacheTest'), 'The returned value was not the expected unserialized array.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsResultFromBackend()
     {
         $backend = $this->prepareDefaultBackend();
@@ -163,9 +147,7 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertTrue($cache->has('VariableCacheTest'), 'has() did not return true.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeCallsBackend()
     {
         $cacheIdentifier = 'someCacheIdentifier';
@@ -177,9 +159,7 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertTrue($cache->remove($cacheIdentifier), 'remove() did not return true');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagRejectsInvalidTags()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -190,9 +170,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->getByTag('SomeInvalid\Tag');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagThrowAnExceptionWithoutTaggableBackend()
     {
         $this->expectException(NotSupportedByBackendException::class);
@@ -201,9 +179,7 @@ final class VariableFrontendTest extends BaseTestCase
         $cache->getByTag('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagCallsBackendAndReturnsIdentifiersAndValuesOfEntries()
     {
         $tag = 'sometag';
@@ -218,10 +194,8 @@ final class VariableFrontendTest extends BaseTestCase
         self::assertSame($entries, $cache->getByTag($tag), 'Did not receive the expected entries');
     }
 
-    /**
-     * @test
-     */
-    #[\PHPUnit\Framework\Attributes\RequiresPhpExtension('igbinary')]
+    #[RequiresPhpExtension('igbinary')]
+    #[Test]
     public function getByTagUsesIgBinaryIfAvailable()
     {
         $tag = 'sometag';
@@ -239,7 +213,7 @@ final class VariableFrontendTest extends BaseTestCase
     }
 
     /**
-     * @return AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractBackend|MockObject
      */
     protected function prepareDefaultBackend()
     {
@@ -251,7 +225,7 @@ final class VariableFrontendTest extends BaseTestCase
 
     /**
      * @param array $methods
-     * @return AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractBackend|MockObject
      */
     protected function prepareTaggableBackend(array $methods = ['get', 'set', 'has', 'remove', 'findIdentifiersByTag', 'flush', 'flushByTag', 'collectGarbage'])
     {

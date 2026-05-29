@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Functional\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -31,7 +33,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Since all keys have the 'TestCache:' prefix, running the tests should have
  * no side effects on non-related cache entries.
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('pdo')]
+#[RequiresPhpExtension('pdo')]
 final class PdoBackendTest extends BaseTestCase
 {
     /**
@@ -55,9 +57,7 @@ final class PdoBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAddsCacheEntry(): void
     {
         foreach ($this->backends as $backend) {
@@ -70,9 +70,7 @@ final class PdoBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function cacheEntriesCanBeIterated(): void
     {
         foreach ($this->backends as $backend) {

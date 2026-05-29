@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Psr\SimpleCache;
 
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Cache\Backend\NullBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Psr\SimpleCache\SimpleCacheFactory;
@@ -37,9 +38,7 @@ final class SimpleCacheFactoryTest extends BaseTestCase
             ])->getMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createConstructsASimpleCache()
     {
         $simpleCacheFactory = new SimpleCacheFactory($this->mockEnvironmentConfiguration);

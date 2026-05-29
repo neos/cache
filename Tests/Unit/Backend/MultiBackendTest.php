@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 use Neos\Cache\Backend\MultiBackend;
@@ -13,9 +15,7 @@ use Neos\Cache\Tests\BaseTestCase;
 
 final class MultiBackendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function noExceptionIsThrownIfBackendFailsToBeCreated(): void
     {
         $backendOptions = [
@@ -36,9 +36,7 @@ final class MultiBackendTest extends BaseTestCase
         self::assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function debugModeWillBubbleExceptions(): void
     {
         $this->expectException(\Throwable::class);
@@ -61,9 +59,7 @@ final class MultiBackendTest extends BaseTestCase
         self::assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function writesToAllBackends(): void
     {
         $mockBuilder = $this->getMockBuilder(NullBackend::class);
@@ -80,9 +76,7 @@ final class MultiBackendTest extends BaseTestCase
         $multiBackend->set('foo', 'data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function fallsBackToSecondaryBackend(): void
     {
         $mockBuilder = $this->getMockBuilder(NullBackend::class);
@@ -100,9 +94,7 @@ final class MultiBackendTest extends BaseTestCase
         self::assertSame(5, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removesUnhealthyBackend(): void
     {
         $mockBuilder = $this->getMockBuilder(NullBackend::class);

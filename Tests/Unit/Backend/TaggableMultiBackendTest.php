@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 use Neos\Cache\Backend\NullBackend;
@@ -12,9 +14,7 @@ use Neos\Cache\Tests\BaseTestCase;
 
 final class TaggableMultiBackendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagReturnsCountOfFlushedEntries(): void
     {
         $mockBuilder = $this->getMockBuilder(NullBackend::class);

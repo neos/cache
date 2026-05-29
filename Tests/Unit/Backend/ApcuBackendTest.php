@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Neos\Flow\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -26,7 +30,7 @@ use Neos\Cache\Frontend\VariableFrontend;
 /**
  * Testcase for the APCu cache backend
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('apcu')]
+#[RequiresPhpExtension('apcu')]
 final class ApcuBackendTest extends BaseTestCase
 {
     /**
@@ -44,9 +48,7 @@ final class ApcuBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsExceptionIfNoFrontEndHasBeenSet()
     {
         $this->expectException(Exception::class);
@@ -56,9 +58,7 @@ final class ApcuBackendTest extends BaseTestCase
         $backend->set($identifier, $data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToSetAndCheckExistenceInCache()
     {
         $backend = $this->setUpBackend();
@@ -82,9 +82,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEquals($data, $fetchedData, 'APCu backend failed to set and retrieve data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToRemoveEntryFromCache()
     {
         $backend = $this->setUpBackend();
@@ -96,9 +94,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertFalse($inCache, 'Failed to set and remove data from APCu backend');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToOverwriteAnEntryInTheCache()
     {
         $backend = $this->setUpBackend();
@@ -111,9 +107,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEquals($otherData, $fetchedData, 'APCu backend failed to overwrite and retrieve data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findIdentifiersByTagFindsSetEntries()
     {
         $backend = $this->setUpBackend();
@@ -129,9 +123,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEquals($identifier, $retrieved[0], 'Could not retrieve expected entry by tag.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setRemovesTagsFromPreviousSet()
     {
         $backend = $this->setUpBackend();
@@ -145,9 +137,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEquals([], $retrieved, 'Found entry which should no longer exist.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -156,9 +146,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertFalse($inCache, '"has" did not return false when checking on non existing identifier');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -167,9 +155,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertFalse($inCache, '"remove" did not return false when checking on non existing identifier');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagRemovesCacheEntriesWithSpecifiedTag()
     {
         $backend = $this->setUpBackend();
@@ -186,9 +172,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertTrue($backend->has('BackendAPCUTest3'), 'BackendAPCUTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagsRemovesCacheEntriesWithSpecifiedTags()
     {
         $backend = $this->setUpBackend();
@@ -205,9 +189,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertTrue($backend->has('BackendAPCUTest3'), 'BackendAPCUTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesAllCacheEntries()
     {
         $backend = $this->setUpBackend();
@@ -224,9 +206,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertFalse($backend->has('BackendAPCUTest3'), 'BackendAPCUTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesOnlyOwnEntries()
     {
         $thisCache = $this->createMock(FrontendInterface::class);
@@ -249,9 +229,8 @@ final class ApcuBackendTest extends BaseTestCase
 
     /**
      * Check if we can store ~5 MB of data, this gives some headroom.
-     *
-     * @test
      */
+    #[Test]
     public function largeDataIsStored()
     {
         $backend = $this->setUpBackend();
@@ -264,9 +243,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEquals($backend->get($identifier), $data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function backendAllowsForIteratingOverEntries()
     {
         $backend = $this->setUpBackend();
@@ -294,9 +271,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertSame(100, $i);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverEmptyCacheYieldsNoData()
     {
         $backend = $this->setUpBackend();
@@ -307,9 +282,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationOverNotEmptyCacheYieldsData()
     {
         $backend = $this->setUpBackend();
@@ -327,9 +300,7 @@ final class ApcuBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataIsSet()
     {
         $backend = $this->setUpBackend();
@@ -353,9 +324,7 @@ final class ApcuBackendTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataFlushed()
     {
         $backend = $this->setUpBackend();
@@ -374,9 +343,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataFlushedByTag()
     {
         $backend = $this->setUpBackend();
@@ -395,9 +362,7 @@ final class ApcuBackendTest extends BaseTestCase
         self::assertEmpty($data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function iterationResetsWhenDataGetsRemoved()
     {
         $backend = $this->setUpBackend();
@@ -432,7 +397,7 @@ final class ApcuBackendTest extends BaseTestCase
     }
 
     /**
-     * @return EnvironmentConfiguration|\PHPUnit\Framework\MockObject\MockObject
+     * @return EnvironmentConfiguration|MockObject
      */
     public function getEnvironmentConfiguration()
     {

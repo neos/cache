@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -26,7 +30,7 @@ use Neos\Cache\Frontend\FrontendInterface;
 /**
  * Testcase for the cache to memcached backend
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('memcached')]
+#[RequiresPhpExtension('memcached')]
 class MemcachedBackendTest extends BaseTestCase
 {
     /**
@@ -45,9 +49,7 @@ class MemcachedBackendTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsExceptionIfNoFrontEndHasBeenSet()
     {
         $this->expectException(Exception::class);
@@ -58,18 +60,14 @@ class MemcachedBackendTest extends BaseTestCase
         $backend->set($identifier, $data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function initializeObjectThrowsExceptionIfNoMemcacheServerIsConfigured()
     {
         $this->expectException(Exception::class);
         $backend = new MemcachedBackend($this->getEnvironmentConfiguration(), []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsExceptionIfConfiguredServersAreUnreachable()
     {
         $this->expectException(Exception::class);
@@ -79,9 +77,7 @@ class MemcachedBackendTest extends BaseTestCase
         $backend->set($identifier, $data);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToSetAndCheckExistenceInCache()
     {
         $backend = $this->setUpBackend();
@@ -92,9 +88,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertTrue($inCache, 'Memcache failed to set and check entry');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToSetAndGetEntry()
     {
         $backend = $this->setUpBackend();
@@ -105,9 +99,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertEquals($data, $fetchedData, 'Memcache failed to set and retrieve data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToRemoveEntryFromCache()
     {
         $backend = $this->setUpBackend();
@@ -119,9 +111,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertFalse($inCache, 'Failed to set and remove data from Memcache');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itIsPossibleToOverwriteAnEntryInTheCache()
     {
         $backend = $this->setUpBackend();
@@ -134,9 +124,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertEquals($otherData, $fetchedData, 'Memcache failed to overwrite and retrieve data');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findIdentifiersByTagFindsCacheEntriesWithSpecifiedTag()
     {
         $backend = $this->setUpBackend();
@@ -152,9 +140,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertEquals($identifier, $retrieved[0], 'Could not retrieve expected entry by tag.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setRemovesTagsFromPreviousSet()
     {
         $backend = $this->setUpBackend();
@@ -168,9 +154,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertEquals([], $retrieved, 'Found entry which should no longer exist.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -179,9 +163,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertFalse($inCache, '"has" did not return false when checking on non existing identifier');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeReturnsFalseIfTheEntryDoesntExist()
     {
         $backend = $this->setUpBackend();
@@ -190,9 +172,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertFalse($inCache, '"remove" did not return false when checking on non existing identifier');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagRemovesCacheEntriesWithSpecifiedTag()
     {
         $backend = $this->setUpBackend();
@@ -209,9 +189,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertTrue($backend->has('BackendMemcacheTest3'), 'BackendMemcacheTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesAllCacheEntries()
     {
         $backend = $this->setUpBackend();
@@ -228,9 +206,7 @@ class MemcachedBackendTest extends BaseTestCase
         self::assertFalse($backend->has('BackendMemcacheTest3'), 'BackendMemcacheTest3');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function flushRemovesOnlyOwnEntries()
     {
         $backendOptions = ['servers' => ['localhost:11211']];
@@ -256,9 +232,8 @@ class MemcachedBackendTest extends BaseTestCase
     /**
      * Check if we can store ~5 MB of data, this gives some headroom for the
      * reflection data.
-     *
-     * @test
      */
+    #[Test]
     public function largeDataIsStored()
     {
         $backend = $this->setUpBackend();
@@ -288,7 +263,7 @@ class MemcachedBackendTest extends BaseTestCase
     }
 
     /**
-     * @return EnvironmentConfiguration|\PHPUnit\Framework\MockObject\MockObject
+     * @return EnvironmentConfiguration|MockObject
      */
     public function getEnvironmentConfiguration()
     {

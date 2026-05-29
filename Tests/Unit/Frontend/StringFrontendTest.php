@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Frontend;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -29,9 +32,7 @@ use Neos\Cache\Tests\BaseTestCase;
  */
 final class StringFrontendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function setChecksIfTheIdentifierIsValid()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -43,9 +44,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->set('foo', 'bar');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesStringToBackend()
     {
         $theString = 'Just some value';
@@ -56,9 +55,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->set('StringCacheTest', $theString);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setPassesLifetimeToBackend()
     {
         $theString = 'Just some value';
@@ -71,9 +68,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->set('StringCacheTest', $theString, [], $theLifetime);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setThrowsInvalidDataExceptionOnNonStringValues()
     {
         $this->expectException(InvalidDataException::class);
@@ -83,9 +78,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->set('StringCacheTest', []);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFetchesStringValueFromBackend()
     {
         $backend = $this->prepareDefaultBackend();
@@ -96,9 +89,7 @@ final class StringFrontendTest extends BaseTestCase
         self::assertEquals('Just some value', $cache->get('StringCacheTest'), 'The returned value was not the expected string.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasReturnsResultFromBackend()
     {
         $backend = $this->prepareDefaultBackend();
@@ -108,9 +99,7 @@ final class StringFrontendTest extends BaseTestCase
         self::assertTrue($cache->has('StringCacheTest'), 'has() did not return true.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeCallsBackend()
     {
         $cacheIdentifier = 'someCacheIdentifier';
@@ -122,9 +111,7 @@ final class StringFrontendTest extends BaseTestCase
         self::assertTrue($cache->remove($cacheIdentifier), 'remove() did not return true');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagRejectsInvalidTags()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -135,9 +122,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->getByTag('SomeInvalid\Tag');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagThrowAnExceptionWithoutTaggableBackend()
     {
         $this->expectException(NotSupportedByBackendException::class);
@@ -146,9 +131,7 @@ final class StringFrontendTest extends BaseTestCase
         $cache->getByTag('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getByTagCallsBackendAndReturnsIdentifiersAndValuesOfEntries()
     {
         $tag = 'sometag';
@@ -165,7 +148,7 @@ final class StringFrontendTest extends BaseTestCase
 
     /**
      * @param array $methods
-     * @return AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractBackend|MockObject
      */
     protected function prepareDefaultBackend(array $methods = ['get', 'set', 'has', 'remove', 'flush', 'collectGarbage'])
     {
@@ -177,7 +160,7 @@ final class StringFrontendTest extends BaseTestCase
 
     /**
      * @param array $methods
-     * @return AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
+     * @return AbstractBackend|MockObject
      */
     protected function prepareTaggableBackend(array $methods = ['get', 'set', 'has', 'remove', 'findIdentifiersByTag', 'flush', 'flushByTag', 'collectGarbage'])
     {

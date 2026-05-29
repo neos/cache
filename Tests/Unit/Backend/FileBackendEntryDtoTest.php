@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 use Neos\Cache\Backend\FileBackendEntryDto;
@@ -27,20 +30,16 @@ final class FileBackendEntryDtoTest extends BaseTestCase
         yield ['data', ['tag1', 'tag2'], time()];
     }
 
-    /**
-     * @dataProvider validEntryConstructorParameters
-     * @test
-     */
+    #[DataProvider('validEntryConstructorParameters')]
+    #[Test]
     public function canBeCreatedWithConstructor(string $data, array $tags, int $expiryTime): void
     {
         $entryDto = new FileBackendEntryDto($data, $tags, $expiryTime);
         self::assertInstanceOf(FileBackendEntryDto::class, $entryDto);
     }
 
-    /**
-     * @dataProvider validEntryConstructorParameters
-     * @test
-     */
+    #[DataProvider('validEntryConstructorParameters')]
+    #[Test]
     public function gettersReturnDataProvidedToConstructor(string $data, array $tags, int $expiryTime): void
     {
         $entryDto = new FileBackendEntryDto($data, $tags, $expiryTime);
@@ -49,28 +48,22 @@ final class FileBackendEntryDtoTest extends BaseTestCase
         self::assertSame($expiryTime, $entryDto->getExpiryTime());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isExpiredReturnsFalseIfExpiryTimeIsInFuture(): void
     {
         $entryDto = new FileBackendEntryDto('data', [], time() + 10);
         self::assertFalse($entryDto->isExpired());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isExpiredReturnsTrueIfExpiryTimeIsInPast(): void
     {
         $entryDto = new FileBackendEntryDto('data', [], time() - 10);
         self::assertTrue($entryDto->isExpired());
     }
 
-    /**
-     * @dataProvider validEntryConstructorParameters
-     * @test
-     */
+    #[DataProvider('validEntryConstructorParameters')]
+    #[Test]
     public function isIdempotent(string $data, array $tags, int $expiryTime): void
     {
         $entryDto = new FileBackendEntryDto($data, $tags, $expiryTime);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -36,7 +38,7 @@ final class AbstractBackendTest extends BaseTestCase
      */
     protected function setUp(): void
     {
-        $this->backend = new class (new EnvironmentConfiguration('Ultraman Neos Testing', '/some/path', PHP_MAXPATHLEN)) extends \Neos\Cache\Backend\AbstractBackend {
+        $this->backend = new class (new EnvironmentConfiguration('Ultraman Neos Testing', '/some/path', PHP_MAXPATHLEN)) extends AbstractBackend {
             protected $someOption;
             public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = NULL): void {}
             public function get(string $entryIdentifier): string {}
@@ -56,9 +58,7 @@ final class AbstractBackendTest extends BaseTestCase
         };
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function theConstructorCallsSetterMethodsForAllSpecifiedOptions()
     {
         $className = get_class($this->backend);

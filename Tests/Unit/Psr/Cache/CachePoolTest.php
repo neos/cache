@@ -13,7 +13,8 @@ namespace Neos\Cache\Tests\Unit\Psr\Cache;
  * information, please view the LICENSE file which was distributed with this
  * source code.
  */
-
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Cache\Backend\AbstractBackend;
 use Neos\Cache\Backend\BackendInterface;
 use Neos\Cache\Psr\Cache\CachePool;
@@ -42,10 +43,8 @@ final class CachePoolTest extends BaseTestCase
         yield ['a-string-that-exceeds-the-psr-minimum-maxlength-of-sixtyfour-but-is-shorter-than-twohundredandfifty-characters'];
     }
 
-    /**
-     * @test
-     * @dataProvider validIdentifiersDataProvider
-     */
+    #[DataProvider('validIdentifiersDataProvider')]
+    #[Test]
     public function validIdentifiers(string $identifier): void
     {
         $mockBackend = $this->createStub(BackendInterface::class);
@@ -60,10 +59,8 @@ final class CachePoolTest extends BaseTestCase
         yield ['a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-which-is-pretty-large-as-it-turns-out-so-i-repeat-a-string-that-exceeds-the-maximum-allowed-length-of-twohundredandfifty-characters-still-not-there-wow-crazy-flow-rocks-though'];
     }
 
-    /**
-     * @test
-     * @dataProvider invalidIdentifiersDataProvider
-     */
+    #[DataProvider('invalidIdentifiersDataProvider')]
+    #[Test]
     public function invalidIdentifiers(string $identifier): void
     {
         $mockBackend = $this->createStub(BackendInterface::class);
@@ -72,9 +69,7 @@ final class CachePoolTest extends BaseTestCase
         new CachePool($identifier, $mockBackend);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getItemChecksIfTheIdentifierIsValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -87,9 +82,7 @@ final class CachePoolTest extends BaseTestCase
         $cache->getItem('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function savePassesSerializedStringToBackend(): void
     {
         $theString = 'Just some value';
@@ -101,9 +94,7 @@ final class CachePoolTest extends BaseTestCase
         $cache->save($cacheItem);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function savePassesSerializedArrayToBackend(): void
     {
         $theArray = ['Just some value', 'and another one.'];
@@ -115,9 +106,7 @@ final class CachePoolTest extends BaseTestCase
         $cache->save($cacheItem);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function savePassesLifetimeToBackend(): void
     {
         // Note that this test can fail due to fraction of second problems in the calculation of lifetime vs. expiration date.
@@ -132,9 +121,7 @@ final class CachePoolTest extends BaseTestCase
         $cache->save($cacheItem);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getItemFetchesValueFromBackend(): void
     {
         $theString = 'Just some value';
@@ -146,9 +133,7 @@ final class CachePoolTest extends BaseTestCase
         self::assertEquals($theString, $cache->getItem('PsrCacheTest')->get(), 'The returned value was not the expected string.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getItemFetchesFalseBooleanValueFromBackend(): void
     {
         $backend = $this->prepareDefaultBackend();
@@ -160,9 +145,7 @@ final class CachePoolTest extends BaseTestCase
         self::assertEquals(false, $retrievedItem->get(), 'The returned value was not the false.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasItemReturnsResultFromBackend(): void
     {
         $backend = $this->prepareDefaultBackend();
@@ -172,9 +155,7 @@ final class CachePoolTest extends BaseTestCase
         self::assertTrue($cache->hasItem('PsrCacheTest'), 'hasItem() did not return true.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function deleteItemCallsBackend(): void
     {
         $cacheIdentifier = 'someCacheIdentifier';

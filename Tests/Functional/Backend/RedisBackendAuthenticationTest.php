@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Functional\Backend;
 
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 /*
@@ -39,7 +42,7 @@ use Redis;
  * acl setuser test_no_password on > ~* &* +@all
  * acl setuser test_password on >secret_password ~* &* +@all
  */
-#[\PHPUnit\Framework\Attributes\RequiresPhpExtension('redis')]
+#[RequiresPhpExtension('redis')]
 final class RedisBackendAuthenticationTest extends BaseTestCase
 {
     /**
@@ -105,9 +108,7 @@ final class RedisBackendAuthenticationTest extends BaseTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function defaultUserNoPassword()
     {
         $backend = new RedisBackend(
@@ -117,9 +118,7 @@ final class RedisBackendAuthenticationTest extends BaseTestCase
         $this->assertInstanceOf('Neos\Cache\Backend\RedisBackend', $backend);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usernameNoPassword()
     {
         $backend = new RedisBackend(
@@ -129,9 +128,7 @@ final class RedisBackendAuthenticationTest extends BaseTestCase
         $this->assertInstanceOf('Neos\Cache\Backend\RedisBackend', $backend);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function usernamePassword()
     {
         $backend = new RedisBackend(
@@ -141,9 +138,7 @@ final class RedisBackendAuthenticationTest extends BaseTestCase
         $this->assertInstanceOf('Neos\Cache\Backend\RedisBackend', $backend);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function incorrectUsernamePassword()
     {
         $this->expectException(RedisException::class);
