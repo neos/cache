@@ -38,7 +38,7 @@ class AbstractBackendTest extends BaseTestCase
         eval('
             #[\AllowDynamicProperties]
             class ' . $className . ' extends \Neos\Cache\Backend\AbstractBackend {
-                public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = NULL): void {}
+                public function set(string $entryIdentifier, string $data, array $tags = [], ?int $lifetime = NULL): void {}
                 public function get(string $entryIdentifier): string {}
                 public function has(string $entryIdentifier): bool {}
                 public function remove(string $entryIdentifier): bool {}
