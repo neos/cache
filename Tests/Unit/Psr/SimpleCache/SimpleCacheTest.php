@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Cache\Tests\Unit\Psr\SimpleCache;
 
 use Neos\Cache\Backend\BackendInterface;

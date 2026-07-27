@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Neos\Cache\Backend;
@@ -15,14 +16,14 @@ namespace Neos\Cache\Backend;
 
 use Neos\Cache\Backend\AbstractBackend as IndependentAbstractBackend;
 use Neos\Cache\EnvironmentConfiguration;
+use Neos\Cache\Exception;
+use Neos\Cache\Frontend\FrontendInterface;
+use Neos\Cache\Frontend\PhpFrontend;
 use Neos\Error\Messages\Error;
 use Neos\Error\Messages\Notice;
 use Neos\Error\Messages\Result;
-use Neos\Utility\Files;
-use Neos\Cache\Exception;
-use Neos\Cache\Frontend\PhpFrontend;
-use Neos\Cache\Frontend\FrontendInterface;
 use Neos\Utility\Exception\FilesException;
+use Neos\Utility\Files;
 use Neos\Utility\OpcodeCacheHelper;
 
 /**

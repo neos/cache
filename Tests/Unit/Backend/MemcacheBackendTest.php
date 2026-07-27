@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Cache\Tests\Unit\Backend;
 
 include_once('MemcachedBackendTest.php');
