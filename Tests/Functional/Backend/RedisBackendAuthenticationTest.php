@@ -18,8 +18,8 @@ use Exception;
 use Neos\Cache\Backend\RedisBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Tests\BaseTestCase;
-use RedisException;
 use Redis;
+use RedisException;
 
 /**
  * Testcase for the redis cache backend

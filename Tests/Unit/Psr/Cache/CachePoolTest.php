@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Cache\Tests\Unit\Psr\Cache;
 
 /*
@@ -13,8 +14,8 @@ namespace Neos\Cache\Tests\Unit\Psr\Cache;
 
 use Neos\Cache\Backend\AbstractBackend;
 use Neos\Cache\Backend\BackendInterface;
-use Neos\Cache\Psr\Cache\CachePool;
 use Neos\Cache\Psr\Cache\CacheItem;
+use Neos\Cache\Psr\Cache\CachePool;
 use Neos\Cache\Psr\InvalidArgumentException;
 use Neos\Cache\Tests\BaseTestCase;
 
@@ -73,8 +74,8 @@ class CachePoolTest extends BaseTestCase
         new CachePool($identifier, $mockBackend);
     }
 
-    
-    
+
+
     /**
      * @test
      */

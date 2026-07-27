@@ -1,4 +1,5 @@
 <?php
+
 namespace Neos\Flow\Cache\Tests\Unit\Backend;
 
 include_once(__DIR__ . '/../../BaseTestCase.php');
@@ -16,9 +17,9 @@ include_once(__DIR__ . '/../../BaseTestCase.php');
 use Neos\Cache\Backend\ApcuBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Exception;
-use Neos\Cache\Tests\BaseTestCase;
 use Neos\Cache\Frontend\FrontendInterface;
 use Neos\Cache\Frontend\VariableFrontend;
+use Neos\Cache\Tests\BaseTestCase;
 
 /**
  * Testcase for the APCu cache backend
