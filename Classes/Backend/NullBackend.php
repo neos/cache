@@ -32,7 +32,7 @@ class NullBackend extends AbstractCacheBackend implements PhpCapableBackendInter
      * @param mixed $propertyValue
      * @return boolean TRUE
      */
-    protected function setProperty(string $propertyName, $propertyValue) : bool
+    protected function setProperty(string $propertyName, $propertyValue): bool
     {
         return true;
     }

@@ -74,8 +74,8 @@ class CachePoolTest extends BaseTestCase
         new CachePool($identifier, $mockBackend);
     }
 
-    
-    
+
+
     /**
      * @test
      */
