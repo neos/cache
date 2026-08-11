@@ -40,7 +40,7 @@ final class AbstractBackendTest extends BaseTestCase
     {
         $this->backend = new class (new EnvironmentConfiguration('Ultraman Neos Testing', '/some/path', PHP_MAXPATHLEN)) extends AbstractBackend {
             protected $someOption;
-            public function set(string $entryIdentifier, string $data, array $tags = [], int $lifetime = NULL): void {}
+            public function set(string $entryIdentifier, string $data, array $tags = [], ?int $lifetime = NULL): void {}
             public function get(string $entryIdentifier): string {}
             public function has(string $entryIdentifier): bool {}
             public function remove(string $entryIdentifier): bool {}
