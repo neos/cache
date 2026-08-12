@@ -294,6 +294,8 @@ final class ApcuBackendTest extends BaseTestCase
         $data = \iterator_to_array(
             $cache->getIterator()
         );
+        // APCu does not guarantee any particular iteration order
+        ksort($data);
         self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData'],
             $data
@@ -318,6 +320,8 @@ final class ApcuBackendTest extends BaseTestCase
         $data = \iterator_to_array(
             $cache->getIterator()
         );
+        // APCu does not guarantee any particular iteration order
+        ksort($data);
         self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData', 'third' => 'thirdData'],
             $data

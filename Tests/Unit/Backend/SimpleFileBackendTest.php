@@ -525,6 +525,8 @@ final class SimpleFileBackendTest extends BaseTestCase
         $backend->set('second', 'secondData');
 
         $data = \iterator_to_array($backend);
+        // the backend does not guarantee any particular iteration order
+        ksort($data);
         self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData'],
             $data
@@ -543,6 +545,8 @@ final class SimpleFileBackendTest extends BaseTestCase
         $backend->set('third', 'thirdData');
 
         $data = \iterator_to_array($backend);
+        // the backend does not guarantee any particular iteration order
+        ksort($data);
         self::assertSame(
             ['first' => 'firstData', 'second' => 'secondData', 'third' => 'thirdData'],
             $data
