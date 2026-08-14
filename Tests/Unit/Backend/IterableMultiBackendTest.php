@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 use Neos\Cache\Backend\FileBackend;
@@ -10,12 +12,12 @@ use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Frontend\VariableFrontend;
 use Neos\Cache\Tests\BaseTestCase;
 
-class IterableMultiBackendTest extends BaseTestCase
+final class IterableMultiBackendTest extends BaseTestCase
 {
     /**
-     * @test
      * @throws \Throwable
      */
+    #[Test]
     public function allowsToIterateOverCacheEntries(): void
     {
         $multiBackend = new IterableMultiBackend(

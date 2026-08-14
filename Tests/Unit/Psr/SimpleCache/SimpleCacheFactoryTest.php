@@ -1,6 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Neos\Cache\Tests\Unit\Psr\SimpleCache;
 
+use PHPUnit\Framework\Attributes\Test;
 use Neos\Cache\Backend\NullBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Psr\SimpleCache\SimpleCacheFactory;
@@ -11,7 +15,7 @@ use Psr\SimpleCache\CacheInterface;
 /**
  * Tets the factors for PSR-16 Simple Caches
  */
-class SimpleCacheFactoryTest extends BaseTestCase
+final class SimpleCacheFactoryTest extends BaseTestCase
 {
     /**
      * @var EnvironmentConfiguration
@@ -26,7 +30,7 @@ class SimpleCacheFactoryTest extends BaseTestCase
         vfsStream::setup('Temporary/Directory/');
 
         $this->mockEnvironmentConfiguration = $this->getMockBuilder(EnvironmentConfiguration::class)
-            ->setMethods(null)
+            ->onlyMethods([])
             ->setConstructorArgs([
                 __DIR__ . '~Testing',
                 'vfs://Temporary/Directory/',
@@ -34,9 +38,7 @@ class SimpleCacheFactoryTest extends BaseTestCase
             ])->getMock();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createConstructsASimpleCache()
     {
         $simpleCacheFactory = new SimpleCacheFactory($this->mockEnvironmentConfiguration);

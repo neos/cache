@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Neos\Cache\Tests\Unit\Backend;
 
+use PHPUnit\Framework\Attributes\Test;
+
 include_once(__DIR__ . '/../../BaseTestCase.php');
 
 use Neos\Cache\Backend\NullBackend;
@@ -10,11 +12,9 @@ use Neos\Cache\Backend\TaggableMultiBackend;
 use Neos\Cache\EnvironmentConfiguration;
 use Neos\Cache\Tests\BaseTestCase;
 
-class TaggableMultiBackendTest extends BaseTestCase
+final class TaggableMultiBackendTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function flushByTagReturnsCountOfFlushedEntries(): void
     {
         $mockBuilder = $this->getMockBuilder(NullBackend::class);
@@ -22,9 +22,9 @@ class TaggableMultiBackendTest extends BaseTestCase
         $secondNullBackendMock = $mockBuilder->getMock();
         $thirdNullBackendMock = $mockBuilder->getMock();
 
-        $firstNullBackendMock->expects(self::once())->method('flushByTag')->with('foo')->willReturn(2);
-        $secondNullBackendMock->expects(self::once())->method('flushByTag')->with('foo')->willThrowException(new \RuntimeException());
-        $thirdNullBackendMock->expects(self::once())->method('flushByTag')->with('foo')->willReturn(3);
+        $firstNullBackendMock->expects($this->once())->method('flushByTag')->with('foo')->willReturn(2);
+        $secondNullBackendMock->expects($this->once())->method('flushByTag')->with('foo')->willThrowException(new \RuntimeException());
+        $thirdNullBackendMock->expects($this->once())->method('flushByTag')->with('foo')->willReturn(3);
 
         $multiBackend = new TaggableMultiBackend($this->getEnvironmentConfiguration(), []);
         $this->inject($multiBackend, 'backends', [$firstNullBackendMock, $secondNullBackendMock, $thirdNullBackendMock]);
